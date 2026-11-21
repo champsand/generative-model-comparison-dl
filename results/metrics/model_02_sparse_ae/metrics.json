@@ -1,0 +1,203 @@
+{
+  "model_name": "02_sparse_ae",
+  "model_class": "SparseAutoencoder",
+  "seed": 42,
+  "split_counts": {
+    "train": 56000,
+    "val": 7000,
+    "test": 7000
+  },
+  "split_per_class_counts": {
+    "train": {
+      "0": 5600,
+      "1": 5600,
+      "2": 5600,
+      "3": 5600,
+      "4": 5600,
+      "5": 5600,
+      "6": 5600,
+      "7": 5600,
+      "8": 5600,
+      "9": 5600
+    },
+    "val": {
+      "0": 700,
+      "1": 700,
+      "2": 700,
+      "3": 700,
+      "4": 700,
+      "5": 700,
+      "6": 700,
+      "7": 700,
+      "8": 700,
+      "9": 700
+    },
+    "test": {
+      "0": 700,
+      "1": 700,
+      "2": 700,
+      "3": 700,
+      "4": 700,
+      "5": 700,
+      "6": 700,
+      "7": 700,
+      "8": 700,
+      "9": 700
+    }
+  },
+  "split_sha256": {
+    "train": "33ea53524b4322bff6a3800d5f997fb49a2c3109cc676bcec3f5bd75614d563f",
+    "val": "ec0ca9f1abc64ba260835d8b8ade0d19c59aed038153fbab1103386380698254",
+    "test": "e10a9ab4471795dfab37b6b9a652c9a27f56343cea3a08bb82b97de2332bc3a1"
+  },
+  "epochs_completed": 30,
+  "best_epoch": 30,
+  "best_val_recon_mse": 0.008218620219933135,
+  "best_val_total_objective": 0.008675442320959908,
+  "model_selection": "lowest validation reconstruction MSE",
+  "lambda_l1": 0.001,
+  "sparsity_threshold": 1e-08,
+  "latent_dim": 64,
+  "trainable_params": 435536,
+  "test": {
+    "num_images": 7000,
+    "mse": 0.008381658201004397,
+    "psnr_db": 20.766700534096362,
+    "ssim_mean": 0.7404930242967522,
+    "ssim_num_images": 7000,
+    "ssim_params": {
+      "data_range": 1.0,
+      "gaussian_weights": true,
+      "sigma": 1.5,
+      "win_size": 11,
+      "use_sample_covariance": false
+    },
+    "ssim_implementation": "skimage.metrics.structural_similarity, arithmetic mean over images",
+    "latent_sparsity": {
+      "mean_abs_latent_activation": 0.45641116000921983,
+      "weighted_l1_penalty": 0.00045641116000921984,
+      "zero_fraction_le_threshold": 0.37774107142857144,
+      "active_fraction_gt_threshold": 0.6222589285714286,
+      "threshold": 1e-08,
+      "num_latent_elements": 448000
+    }
+  },
+  "timing": {
+    "total_training_wall_time_s": 240.77479938400006,
+    "mean_epoch_wall_time_s": 7.990341234866672,
+    "total_epoch_wall_time_s": 239.71023704600015,
+    "mean_train_time_s": 7.041776757266662,
+    "mean_val_time_s": 0.907276905066656
+  },
+  "latency": {
+    "mean_ms_per_batch": 0.23055031000239978,
+    "std_ms_per_batch": 0.08016862090063935,
+    "median_ms_per_batch": 0.21347500000956643,
+    "ms_per_image": 0.0036023485937874966,
+    "batch_size": 64,
+    "warmup_runs": 20,
+    "timed_runs": 100,
+    "device": "cuda",
+    "hardware": "Tesla T4",
+    "definition": "encoder + decoder forward pass",
+    "note": "Hardware-dependent; compare only on the same hardware."
+  },
+  "runtime_versions": {
+    "python": "3.13.16",
+    "torch": "2.14.1+cu130",
+    "torchvision": "0.29.1+cu130",
+    "numpy": "2.4.6",
+    "scikit_image": "0.25.2",
+    "matplotlib": "3.10.0",
+    "pandas": "2.2.3",
+    "cuda": "13.0",
+    "cudnn": 92800
+  },
+  "figure_samples": {
+    "reconstruction_comparison": [
+      {
+        "class_id": 0,
+        "class_name": "T-shirt/top",
+        "test_position": 0,
+        "pooled_index": 39323
+      },
+      {
+        "class_id": 1,
+        "class_name": "Trouser",
+        "test_position": 3,
+        "pooled_index": 6906
+      },
+      {
+        "class_id": 2,
+        "class_name": "Pullover",
+        "test_position": 17,
+        "pooled_index": 66404
+      },
+      {
+        "class_id": 3,
+        "class_name": "Dress",
+        "test_position": 5,
+        "pooled_index": 15479
+      },
+      {
+        "class_id": 4,
+        "class_name": "Coat",
+        "test_position": 12,
+        "pooled_index": 7166
+      },
+      {
+        "class_id": 5,
+        "class_name": "Sandal",
+        "test_position": 1,
+        "pooled_index": 42925
+      },
+      {
+        "class_id": 6,
+        "class_name": "Shirt",
+        "test_position": 9,
+        "pooled_index": 40588
+      },
+      {
+        "class_id": 7,
+        "class_name": "Sneaker",
+        "test_position": 14,
+        "pooled_index": 48392
+      }
+    ],
+    "latent_interpolation": {
+      "endpoints": {
+        "start": {
+          "class_id": 0,
+          "class_name": "T-shirt/top",
+          "test_position": 0,
+          "pooled_index": 39323
+        },
+        "end": {
+          "class_id": 1,
+          "class_name": "Trouser",
+          "test_position": 3,
+          "pooled_index": 6906
+        }
+      },
+      "alphas": [
+        0.0,
+        0.2,
+        0.4,
+        0.6,
+        0.8,
+        1.0
+      ]
+    }
+  },
+  "artifacts": {
+    "best_model": "/content/drive/MyDrive/generative-model-comparison/02_sparse_ae/results/best_model.pth",
+    "metrics": "/content/drive/MyDrive/generative-model-comparison/02_sparse_ae/results/metrics.json",
+    "training_history": "/content/drive/MyDrive/generative-model-comparison/02_sparse_ae/results/training_history.csv",
+    "experiment_config": "/content/drive/MyDrive/generative-model-comparison/02_sparse_ae/results/experiment_config.json",
+    "split_report": "/content/drive/MyDrive/generative-model-comparison/02_sparse_ae/results/split_report.json",
+    "training_curves": "/content/drive/MyDrive/generative-model-comparison/02_sparse_ae/results/figures/training_curves.png",
+    "latent_sparsity_curve": "/content/drive/MyDrive/generative-model-comparison/02_sparse_ae/results/figures/latent_sparsity_curve.png",
+    "reconstruction_comparison": "/content/drive/MyDrive/generative-model-comparison/02_sparse_ae/results/figures/reconstruction_comparison.png",
+    "latent_interpolation": "/content/drive/MyDrive/generative-model-comparison/02_sparse_ae/results/figures/latent_interpolation.png"
+  }
+}
