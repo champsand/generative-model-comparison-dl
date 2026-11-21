@@ -1,0 +1,435 @@
+{
+  "model_name": "07_mlp_classifier_limitation_experiments",
+  "seed": 42,
+  "dataset": {
+    "name": "Fashion-MNIST",
+    "pooled_images": 70000,
+    "split_counts": {
+      "train": 56000,
+      "validation": 7000,
+      "test": 7000
+    },
+    "split_per_class_counts": {
+      "train": {
+        "T-shirt/top": 5600,
+        "Trouser": 5600,
+        "Pullover": 5600,
+        "Dress": 5600,
+        "Coat": 5600,
+        "Sandal": 5600,
+        "Shirt": 5600,
+        "Sneaker": 5600,
+        "Bag": 5600,
+        "Ankle boot": 5600
+      },
+      "validation": {
+        "T-shirt/top": 700,
+        "Trouser": 700,
+        "Pullover": 700,
+        "Dress": 700,
+        "Coat": 700,
+        "Sandal": 700,
+        "Shirt": 700,
+        "Sneaker": 700,
+        "Bag": 700,
+        "Ankle boot": 700
+      },
+      "test": {
+        "T-shirt/top": 700,
+        "Trouser": 700,
+        "Pullover": 700,
+        "Dress": 700,
+        "Coat": 700,
+        "Sandal": 700,
+        "Shirt": 700,
+        "Sneaker": 700,
+        "Bag": 700,
+        "Ankle boot": 700
+      }
+    },
+    "split_sha256_int64": {
+      "train": "33ea53524b4322bff6a3800d5f997fb49a2c3109cc676bcec3f5bd75614d563f",
+      "validation": "ec0ca9f1abc64ba260835d8b8ade0d19c59aed038153fbab1103386380698254",
+      "test": "e10a9ab4471795dfab37b6b9a652c9a27f56343cea3a08bb82b97de2332bc3a1"
+    },
+    "original_official_test_partition_retained": false
+  },
+  "classifier": {
+    "architecture": "784 -> 256 -> 64 -> 10",
+    "trainable_params": 218058,
+    "latent_dim": 64,
+    "epochs_configured": 40,
+    "epochs_completed": 40,
+    "best_epoch": 36,
+    "best_val_accuracy": 0.9001428571428571,
+    "best_val_cross_entropy": 0.3902323444911412,
+    "test_accuracy": 0.8985714316368103,
+    "test_cross_entropy": 0.3777547776699066,
+    "target_test_accuracy": 0.88,
+    "target_met": true,
+    "per_class_test_accuracy": {
+      "T-shirt/top": 0.8314285714285714,
+      "Trouser": 0.9857142857142858,
+      "Pullover": 0.8,
+      "Dress": 0.8914285714285715,
+      "Coat": 0.8057142857142857,
+      "Sandal": 0.9742857142857143,
+      "Shirt": 0.8214285714285714,
+      "Sneaker": 0.9342857142857143,
+      "Bag": 0.9728571428571429,
+      "Ankle boot": 0.9685714285714285
+    },
+    "confusion_matrix": [
+      [
+        582,
+        3,
+        10,
+        6,
+        1,
+        1,
+        97,
+        0,
+        0,
+        0
+      ],
+      [
+        1,
+        690,
+        0,
+        7,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      [
+        13,
+        5,
+        560,
+        6,
+        42,
+        0,
+        74,
+        0,
+        0,
+        0
+      ],
+      [
+        19,
+        9,
+        5,
+        624,
+        12,
+        1,
+        24,
+        0,
+        6,
+        0
+      ],
+      [
+        2,
+        1,
+        46,
+        27,
+        564,
+        0,
+        55,
+        0,
+        5,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        682,
+        0,
+        8,
+        3,
+        7
+      ],
+      [
+        55,
+        1,
+        25,
+        9,
+        30,
+        0,
+        575,
+        0,
+        5,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        12,
+        0,
+        654,
+        2,
+        32
+      ],
+      [
+        6,
+        0,
+        2,
+        0,
+        0,
+        3,
+        7,
+        1,
+        681,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        8,
+        0,
+        13,
+        1,
+        678
+      ]
+    ],
+    "loss": "CrossEntropyLoss on raw logits",
+    "optimizer": "Adam",
+    "learning_rate": 0.001,
+    "batch_size": 128,
+    "total_training_epoch_wall_time_s": 318.0047358519996,
+    "current_session_wall_time_s": 319.226027906
+  },
+  "saved_classifier_weights": {
+    "W1_shape_pytorch_out_in": [
+      256,
+      784
+    ],
+    "W2_shape_pytorch_out_in": [
+      64,
+      256
+    ],
+    "W3_shape_pytorch_out_in": [
+      10,
+      64
+    ],
+    "W1_forward_map": "784 -> 256; nn.Linear.weight shape [256,784]",
+    "W2_forward_map": "256 -> 64; nn.Linear.weight shape [64,256]",
+    "W3_forward_map": "64 -> 10; nn.Linear.weight shape [10,64]",
+    "biases_saved_separately": true,
+    "file": "/content/drive/MyDrive/generative-model-comparison/07_mlp_classifier/results/classifier_weights.npz"
+  },
+  "latent_features": {
+    "definition": "post-ReLU fc2 output immediately before fc3",
+    "train_shape": [
+      56000,
+      64
+    ],
+    "validation_shape": [
+      7000,
+      64
+    ],
+    "test_shape": [
+      7000,
+      64
+    ],
+    "file": "/content/drive/MyDrive/generative-model-comparison/07_mlp_classifier/results/features/mlp_latent_features.npz"
+  },
+  "transpose_projections": {
+    "direct_onehot_to_pixels": {
+      "num_classes": 10,
+      "output_shape": [
+        10,
+        1,
+        28,
+        28
+      ],
+      "formula_column_vector": "z_hat=ReLU(W3^T y_c); h1_hat=ReLU(W2^T z_hat); x_hat=Sigmoid(W1^T h1_hat)",
+      "biases_used": false
+    },
+    "real_test_latent_to_pixels": {
+      "num_test_images": 7000,
+      "output_shape": [
+        7000,
+        1,
+        28,
+        28
+      ],
+      "formula_column_vector": "h1_hat=ReLU(W2^T z_MLP); x_hat=Sigmoid(W1^T h1_hat)",
+      "biases_used": false,
+      "diagnostic_reconstruction_metrics": {
+        "num_images": 7000,
+        "num_pixels": 5488000,
+        "mse": 0.3147332618518501,
+        "psnr_db": 5.0205735726036345,
+        "ssim_mean": 0.049031852129968925,
+        "ssim_std": 0.04007384073232255,
+        "ssim_count": 7000,
+        "ssim_params": {
+          "data_range": 1.0,
+          "gaussian_weights": true,
+          "sigma": 1.5,
+          "win_size": 11,
+          "use_sample_covariance": false
+        }
+      }
+    },
+    "orthogonality_deviation": {
+      "W1_transpose_W1_relative_frobenius_deviation_from_identity": 25.40884860246649,
+      "W2_transpose_W2_relative_frobenius_deviation_from_identity": 5.745400895734073,
+      "W3_transpose_W3_relative_frobenius_deviation_from_identity": 2.636826441044219
+    },
+    "relu_information_loss": {
+      "hidden1_negative_preactivation_fraction": 0.7476690848214286,
+      "hidden2_negative_preactivation_fraction": 0.5428638392857142
+    }
+  },
+  "frozen_latent_decoder": {
+    "architecture": "64 -> 256 -> 784",
+    "trainable_params": 218128,
+    "classifier_frozen": true,
+    "training_epochs_configured": 30,
+    "epochs_completed": 30,
+    "best_epoch": 29,
+    "best_validation_mse": 0.01764868489297597,
+    "test_reconstruction_metrics": {
+      "num_images": 7000,
+      "num_pixels": 5488000,
+      "mse": 0.018037717748610863,
+      "psnr_db": 17.43818413129255,
+      "ssim_mean": 0.5962330031760656,
+      "ssim_std": 0.18359208841613908,
+      "ssim_count": 7000,
+      "ssim_params": {
+        "data_range": 1.0,
+        "gaussian_weights": true,
+        "sigma": 1.5,
+        "win_size": 11,
+        "use_sample_covariance": false
+      }
+    },
+    "total_epoch_wall_time_s": 38.19605863899983,
+    "current_session_wall_time_s": 39.00439075399993
+  },
+  "vanilla_ae_reference": {
+    "model": "Model 01 Vanilla Autoencoder, latent_dim=64",
+    "checkpoint": "/content/drive/MyDrive/generative-model-comparison/01_vanilla_ae/results/best_model.pth",
+    "best_epoch": 30,
+    "test_reconstruction_metrics_recomputed": {
+      "num_images": 7000,
+      "num_pixels": 5488000,
+      "mse": 0.008072855411403672,
+      "psnr_db": 20.929728258631535,
+      "ssim_mean": 0.7451858474965833,
+      "ssim_std": 0.14759616140535184,
+      "ssim_count": 7000,
+      "ssim_params": {
+        "data_range": 1.0,
+        "gaussian_weights": true,
+        "sigma": 1.5,
+        "win_size": 11,
+        "use_sample_covariance": false
+      }
+    },
+    "test_metrics_saved_by_model01": {
+      "num_images": 7000,
+      "mse": 0.008072855411403672,
+      "psnr_db": 20.929728258631535,
+      "ssim_mean": 0.7451858474965833,
+      "ssim_params": {
+        "data_range": 1.0,
+        "gaussian_weights": true,
+        "sigma": 1.5,
+        "win_size": 11,
+        "use_sample_covariance": false
+      },
+      "ssim_aggregation": "arithmetic mean of per-image SSIM over all test images"
+    }
+  },
+  "experiment_5_gaussian_sampling": {
+    "distribution": "z_rand ~ N(mu_z, diag(sigma_z^2))",
+    "statistics_source": "MLP latent features from the 7,000-image test split, as specified by the assignment",
+    "standard_deviation": "population standard deviation (ddof=0), with 1e-6 numerical floor",
+    "seed": 7042,
+    "num_samples": 16,
+    "figure": "/content/drive/MyDrive/generative-model-comparison/07_mlp_classifier/results/figures/mlp_latent_gaussian_samples_4x4.png",
+    "statistics_file": "/content/drive/MyDrive/generative-model-comparison/07_mlp_classifier/results/test_latent_gaussian_statistics.npz",
+    "qualitative_only": true
+  },
+  "inference_latency": {
+    "classifier_forward": {
+      "mean_ms_per_batch": 0.25027329000408827,
+      "std_ms_per_batch": 0.20287101204170954,
+      "median_ms_per_batch": 0.207240500003536,
+      "min_ms_per_batch": 0.16084499998214596,
+      "max_ms_per_batch": 2.162976000022354,
+      "ms_per_image": 0.003910520156313879,
+      "batch_size": 64,
+      "warmup_runs": 20,
+      "timed_runs": 100,
+      "device": "cuda",
+      "hardware": "Tesla T4"
+    },
+    "frozen_decoder_forward": {
+      "mean_ms_per_batch": 0.16140359000814897,
+      "std_ms_per_batch": 0.05201362330950986,
+      "median_ms_per_batch": 0.14145899996265143,
+      "min_ms_per_batch": 0.1092610000341665,
+      "max_ms_per_batch": 0.37650800004485063,
+      "ms_per_image": 0.0025219310938773276,
+      "batch_size": 64,
+      "warmup_runs": 20,
+      "timed_runs": 100,
+      "device": "cuda",
+      "hardware": "Tesla T4"
+    }
+  },
+  "metric_applicability": {
+    "classifier_accuracy": "classification metric for the MLP classifier",
+    "frozen_decoder_mse_psnr_ssim": "reconstruction metrics for the separately trained frozen-latent decoder",
+    "fid": "N/A; no MLP generative FID is required or computed"
+  },
+  "training_history": {
+    "classifier_csv": "/content/drive/MyDrive/generative-model-comparison/07_mlp_classifier/results/classifier_training_history.csv",
+    "decoder_csv": "/content/drive/MyDrive/generative-model-comparison/07_mlp_classifier/results/decoder_training_history.csv"
+  },
+  "artifacts": {
+    "classifier_best_checkpoint": "/content/drive/MyDrive/generative-model-comparison/07_mlp_classifier/results/checkpoints/best_classifier.pth",
+    "classifier_last_checkpoint": "/content/drive/MyDrive/generative-model-comparison/07_mlp_classifier/results/checkpoints/last_classifier_checkpoint.pth",
+    "decoder_best_checkpoint": "/content/drive/MyDrive/generative-model-comparison/07_mlp_classifier/results/checkpoints/best_frozen_latent_decoder.pth",
+    "decoder_last_checkpoint": "/content/drive/MyDrive/generative-model-comparison/07_mlp_classifier/results/checkpoints/last_decoder_checkpoint.pth",
+    "classifier_weights": "/content/drive/MyDrive/generative-model-comparison/07_mlp_classifier/results/classifier_weights.npz",
+    "latent_features": "/content/drive/MyDrive/generative-model-comparison/07_mlp_classifier/results/features/mlp_latent_features.npz",
+    "transpose_results": "/content/drive/MyDrive/generative-model-comparison/07_mlp_classifier/results/transpose_projection_results.npz",
+    "latent_statistics": "/content/drive/MyDrive/generative-model-comparison/07_mlp_classifier/results/test_latent_gaussian_statistics.npz",
+    "split_report": "/content/drive/MyDrive/generative-model-comparison/07_mlp_classifier/results/split_report.json",
+    "classifier_curves": "/content/drive/MyDrive/generative-model-comparison/07_mlp_classifier/results/figures/classifier_training_curves.png",
+    "confusion_matrix": "/content/drive/MyDrive/generative-model-comparison/07_mlp_classifier/results/figures/classifier_confusion_matrix.png",
+    "direct_class_weight_projection": "/content/drive/MyDrive/generative-model-comparison/07_mlp_classifier/results/figures/direct_class_weight_transpose.png",
+    "test_latent_transpose_projection": "/content/drive/MyDrive/generative-model-comparison/07_mlp_classifier/results/figures/test_latent_transpose_projection.png",
+    "frozen_decoder_vs_vanilla_ae": "/content/drive/MyDrive/generative-model-comparison/07_mlp_classifier/results/figures/frozen_decoder_vs_vanilla_ae.png",
+    "gaussian_latent_samples": "/content/drive/MyDrive/generative-model-comparison/07_mlp_classifier/results/figures/mlp_latent_gaussian_samples_4x4.png",
+    "figure3_summary": "/content/drive/MyDrive/generative-model-comparison/07_mlp_classifier/results/figures/figure3_mlp_classifier_limitations.png"
+  },
+  "runtime_versions": {
+    "python": "3.13.16",
+    "platform": "Linux-6.6.159+-x86_64-with-glibc2.39",
+    "torch": "2.14.1+cu130",
+    "torchvision": "0.29.1+cu130",
+    "numpy": "2.4.6",
+    "scikit_image": "0.25.2",
+    "matplotlib": "3.10.0",
+    "cuda": "13.0",
+    "cudnn": 92800,
+    "device": "cuda",
+    "hardware": "Tesla T4"
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "model_name": "07_mlp_classifier",
+  "seed": 42,
+  "total_images": 70000,
+  "pool_order": "FashionMNIST train=True (indices 0-59999) then train=False (indices 60000-69999)",
+  "original_official_test_partition_retained": false,
+  "split_counts": {
+    "train": 56000,
+    "validation": 7000,
+    "test": 7000
+  },
+  "per_class_counts": {
+    "train": {
+      "T-shirt/top": 5600,
+      "Trouser": 5600,
+      "Pullover": 5600,
+      "Dress": 5600,
+      "Coat": 5600,
+      "Sandal": 5600,
+      "Shirt": 5600,
+      "Sneaker": 5600,
+      "Bag": 5600,
+      "Ankle boot": 5600
+    },
+    "validation": {
+      "T-shirt/top": 700,
+      "Trouser": 700,
+      "Pullover": 700,
+      "Dress": 700,
+      "Coat": 700,
+      "Sandal": 700,
+      "Shirt": 700,
+      "Sneaker": 700,
+      "Bag": 700,
+      "Ankle boot": 700
+    },
+    "test": {
+      "T-shirt/top": 700,
+      "Trouser": 700,
+      "Pullover": 700,
+      "Dress": 700,
+      "Coat": 700,
+      "Sandal": 700,
+      "Shirt": 700,
+      "Sneaker": 700,
+      "Bag": 700,
+      "Ankle boot": 700
+    }
+  },
+  "index_sha256_int64": {
+    "train": "33ea53524b4322bff6a3800d5f997fb49a2c3109cc676bcec3f5bd75614d563f",
+    "validation": "ec0ca9f1abc64ba260835d8b8ade0d19c59aed038153fbab1103386380698254",
+    "test": "e10a9ab4471795dfab37b6b9a652c9a27f56343cea3a08bb82b97de2332bc3a1"
+  },
+  "model01_hash_match": true
+}

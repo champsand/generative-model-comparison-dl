@@ -1,0 +1,70 @@
+{
+  "classifier": {
+    "model_name": "07_mlp_classifier",
+    "architecture": "784 -> 256 -> 64 -> 10",
+    "hidden_activation": "ReLU",
+    "output": "10 raw logits (no Softmax in model)",
+    "latent_definition": "post-ReLU output of the 64-unit second hidden layer before fc3",
+    "loss": "CrossEntropyLoss",
+    "optimizer": "Adam",
+    "learning_rate": 0.001,
+    "batch_size": 128,
+    "epochs": 40,
+    "seed": 42,
+    "best_checkpoint_selection": "highest validation accuracy; tie-breaker lowest validation cross-entropy",
+    "target_test_accuracy": 0.88,
+    "trainable_parameters": 218058
+  },
+  "frozen_latent_decoder": {
+    "model_name": "07_frozen_mlp_latent_decoder",
+    "architecture": "64 -> 256 -> 784",
+    "hidden_activation": "ReLU",
+    "output_activation": "Sigmoid",
+    "input_features": "64-dimensional post-ReLU latent features from frozen trained MLP classifier",
+    "classifier_frozen": true,
+    "loss": "MSELoss(reduction='mean')",
+    "optimizer": "Adam",
+    "learning_rate": 0.001,
+    "batch_size": 128,
+    "epochs": 30,
+    "seed": 742,
+    "best_checkpoint_selection": "lowest validation reconstruction MSE",
+    "trainable_parameters": 218128
+  },
+  "dataset": {
+    "name": "Fashion-MNIST",
+    "preprocessing": "ToTensor() only; grayscale [1,28,28], [0,1]",
+    "split": "exact Model 01 ordered stratified 80/10/10 split; seed 42",
+    "split_hashes": {
+      "train": "33ea53524b4322bff6a3800d5f997fb49a2c3109cc676bcec3f5bd75614d563f",
+      "validation": "ec0ca9f1abc64ba260835d8b8ade0d19c59aed038153fbab1103386380698254",
+      "test": "e10a9ab4471795dfab37b6b9a652c9a27f56343cea3a08bb82b97de2332bc3a1"
+    },
+    "batch_size": 128
+  },
+  "ssim_params": {
+    "data_range": 1.0,
+    "gaussian_weights": true,
+    "sigma": 1.5,
+    "win_size": 11,
+    "use_sample_covariance": false
+  },
+  "run_modes": {
+    "classifier": "new",
+    "decoder": "new"
+  },
+  "output_root": "/content/drive/MyDrive/generative-model-comparison/07_mlp_classifier",
+  "runtime_versions": {
+    "python": "3.13.16",
+    "platform": "Linux-6.6.159+-x86_64-with-glibc2.39",
+    "torch": "2.14.1+cu130",
+    "torchvision": "0.29.1+cu130",
+    "numpy": "2.4.6",
+    "scikit_image": "0.25.2",
+    "matplotlib": "3.10.0",
+    "cuda": "13.0",
+    "cudnn": 92800,
+    "device": "cuda",
+    "hardware": "Tesla T4"
+  }
+}
