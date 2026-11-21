@@ -1,0 +1,547 @@
+{
+  "model_id": "05",
+  "model_name": "DCGAN",
+  "model_type": "unconditional convolutional GAN",
+  "notebook": "05_dcgan_claude.ipynb",
+  "dataset": "Fashion-MNIST",
+  "architecture": {
+    "generator": [
+      "input z [B,100,1,1]",
+      "ConvTranspose2d(100,128,kernel_size=7,stride=1,padding=0,bias=False) -> [B,128,7,7]",
+      "BatchNorm2d(128)",
+      "ReLU",
+      "ConvTranspose2d(128,64,kernel_size=4,stride=2,padding=1,bias=False) -> [B,64,14,14]",
+      "BatchNorm2d(64)",
+      "ReLU",
+      "ConvTranspose2d(64,1,kernel_size=4,stride=2,padding=1,bias=False) -> [B,1,28,28]",
+      "Tanh -> [-1,1]"
+    ],
+    "discriminator": [
+      "input x [B,1,28,28] in [-1,1]",
+      "Conv2d(1,64,kernel_size=4,stride=2,padding=1,bias=False) -> [B,64,14,14]",
+      "LeakyReLU(0.2)",
+      "Conv2d(64,128,kernel_size=4,stride=2,padding=1,bias=False) -> [B,128,7,7]",
+      "BatchNorm2d(128)",
+      "LeakyReLU(0.2)",
+      "Conv2d(128,1,kernel_size=7,stride=1,padding=0,bias=True) -> [B,1,1,1] -> logit [B]",
+      "no Sigmoid: BCEWithLogitsLoss is used"
+    ],
+    "initialization": "Conv2d/ConvTranspose2d weight ~ N(0,0.02), bias = 0; BatchNorm2d weight ~ N(1,0.02), bias = 0",
+    "expected_parameter_counts": {
+      "generator": 759680,
+      "discriminator": 138625
+    }
+  },
+  "parameter_counts": {
+    "generator": 759680,
+    "discriminator": 138625,
+    "total": 898305
+  },
+  "latent_dim": 100,
+  "hyperparameters": {
+    "epochs": 30,
+    "batch_size": 128,
+    "optimizer_G": {
+      "type": "Adam",
+      "lr": 0.0002,
+      "betas": [
+        0.5,
+        0.999
+      ],
+      "eps": 1e-08,
+      "weight_decay": 0.0
+    },
+    "optimizer_D": {
+      "type": "Adam",
+      "lr": 0.0002,
+      "betas": [
+        0.5,
+        0.999
+      ],
+      "eps": 1e-08,
+      "weight_decay": 0.0
+    },
+    "loss": "BCEWithLogitsLoss",
+    "d_loss": "0.5 * (BCE(D(real),1) + BCE(D(G(z).detach()),0))",
+    "g_loss": "non-saturating BCE(D(G(z)),1)",
+    "update_order": "one D update then one G update per batch",
+    "latent_noise": "fresh z ~ N(0,I) drawn from the dedicated CPU generator (seed 1042) for each update: one draw for the D update, one draw for the G update",
+    "g_update_discriminator": "D parameters frozen (requires_grad=False) and restored afterwards; D kept in train mode so its BatchNorm running statistics update on the generated batch",
+    "evaluation_mode_for_sampling": "G.eval() (BatchNorm running statistics) for diagnostics, FID, figures and latency",
+    "not_used": [
+      "lr scheduler",
+      "early stopping",
+      "label smoothing",
+      "label flipping",
+      "gradient penalty",
+      "mixed precision",
+      "gradient clipping",
+      "spectral norm",
+      "extra regularization",
+      "TF32"
+    ],
+    "seeds": {
+      "global": 42,
+      "split": 42,
+      "train_loader_generator": 42,
+      "train_noise_generator": 1042,
+      "fixed_diagnostic_noise": 5042,
+      "val_fid_noise": 6042,
+      "test_fid_noise": 7042,
+      "random_grid_noise": 8042,
+      "inversion_restarts_base": 9042,
+      "latency_noise": 10042
+    },
+    "dataloader": {
+      "batch_size": 128,
+      "num_workers": 2,
+      "train_shuffle": true,
+      "val_shuffle": false,
+      "test_shuffle": false,
+      "pin_memory": true,
+      "drop_last": false
+    },
+    "latent_inversion": {
+      "objective": "MSE((G(z)+1)/2, target) + 1e-4 * mean(z^2)",
+      "restarts": 4,
+      "steps_per_restart": 400,
+      "optimizer": "Adam",
+      "lr": 0.05,
+      "latent_reg": 0.0001,
+      "restart_init": "z ~ N(0,I) from CPU generator seeded INVERSION_SEED + 100*endpoint + restart",
+      "selection": "lowest final objective",
+      "endpoint_classes": [
+        0,
+        1
+      ],
+      "endpoint_selection": "first image of each class in the shuffled test-split order"
+    }
+  },
+  "split": {
+    "totals": {
+      "train": 56000,
+      "val": 7000,
+      "test": 7000,
+      "pooled": 70000
+    },
+    "per_class_counts": {
+      "train": {
+        "0": 5600,
+        "1": 5600,
+        "2": 5600,
+        "3": 5600,
+        "4": 5600,
+        "5": 5600,
+        "6": 5600,
+        "7": 5600,
+        "8": 5600,
+        "9": 5600
+      },
+      "val": {
+        "0": 700,
+        "1": 700,
+        "2": 700,
+        "3": 700,
+        "4": 700,
+        "5": 700,
+        "6": 700,
+        "7": 700,
+        "8": 700,
+        "9": 700
+      },
+      "test": {
+        "0": 700,
+        "1": 700,
+        "2": 700,
+        "3": 700,
+        "4": 700,
+        "5": 700,
+        "6": 700,
+        "7": 700,
+        "8": 700,
+        "9": 700
+      }
+    },
+    "sha256_int64_index_bytes": {
+      "train": "33ea53524b4322bff6a3800d5f997fb49a2c3109cc676bcec3f5bd75614d563f",
+      "val": "ec0ca9f1abc64ba260835d8b8ade0d19c59aed038153fbab1103386380698254",
+      "test": "e10a9ab4471795dfab37b6b9a652c9a27f56343cea3a08bb82b97de2332bc3a1"
+    },
+    "seed": 42
+  },
+  "model_selection": {
+    "criterion": "lowest validation FID at scheduled epochs",
+    "best_epoch": 30,
+    "best_val_fid": 27.57159376783585,
+    "val_fid_by_epoch": {
+      "5": 58.24213450323984,
+      "10": 37.961414326317026,
+      "15": 31.487763703838766,
+      "20": 29.48577010879876,
+      "25": 28.926868496784664,
+      "30": 27.57159376783585
+    },
+    "note": "Validation FID is used only for checkpoint selection; it is not the final reported metric."
+  },
+  "final_test_fid": {
+    "value": 22.957129558836186,
+    "num_real": 7000,
+    "num_generated": 7000,
+    "real_feature_shape": [
+      7000,
+      2048
+    ],
+    "generated_feature_shape": [
+      7000,
+      2048
+    ],
+    "feature_dim": 2048,
+    "real_source": "test split (all 7,000 images)",
+    "generated_source": "best generator (epoch 30), fresh z ~ N(0,I), seed 7042",
+    "checkpoint_epoch": 30,
+    "compute_time_s": 57.807509926999955
+  },
+  "fid_protocol": {
+    "library": "pytorch-fid==0.3.0",
+    "network": "FID InceptionV3 (use_fid_inception=True), pool3 2,048-D",
+    "input": "generated/real images in [0,1], grayscale repeated to 3 channels; resize_input=True (bilinear to 299x299), normalize_input=True",
+    "statistics": "float64 mean and covariance (np.cov, rowvar=False); pytorch_fid.fid_score.calculate_frechet_distance",
+    "feature_batch_size": 64,
+    "generation_batch_size": 128,
+    "val_epochs": [
+      5,
+      10,
+      15,
+      20,
+      25,
+      30
+    ],
+    "val_num_real": 3000,
+    "val_num_generated": 3000,
+    "val_real_images": "first 3,000 indices of the shuffled validation split",
+    "val_generated_images": "fixed latent tensor of 3,000 vectors (seed 6042), reused at every scheduled epoch",
+    "test_num_real": 7000,
+    "test_num_generated": 7000,
+    "test_real_images": "all 7,000 test-split images",
+    "test_generated_images": "7,000 fresh prior samples (seed 7042) from the best generator",
+    "negative_tolerance": 1e-06,
+    "model_selection": "lowest validation FID",
+    "limitations": "FID InceptionV3 was trained on ImageNet RGB photographs; Fashion-MNIST images are 28x28 grayscale, repeated to 3 channels and upsampled to 299x299, so features are a proxy. Finite-sample FID is biased upward; values are comparable only across Models 01-05 under this identical protocol. No domain-specific FID is used."
+  },
+  "reconstruction_metrics": {
+    "mse": null,
+    "psnr": null,
+    "ssim": null,
+    "status": "N/A",
+    "reason": "Unconditional DCGAN has no encoder and does not reconstruct inputs."
+  },
+  "training_history_summary": {
+    "epochs_recorded": 30,
+    "g_loss": {
+      "first": 2.1273142238344467,
+      "last": 1.2070095267977035,
+      "min": 1.1950660551616126,
+      "max": 2.1273142238344467,
+      "mean": 1.3180486361242478,
+      "std": 0.2321967902628264
+    },
+    "d_loss": {
+      "first": 0.21808333456516268,
+      "last": 0.5271373378549303,
+      "min": 0.21808333456516268,
+      "max": 0.5438587627410889,
+      "mean": 0.4826084312694414,
+      "std": 0.07891052657960138
+    },
+    "d_real_prob": {
+      "first": 0.8280012376487306,
+      "last": 0.6306823179291013,
+      "min": 0.6253963086766183,
+      "max": 0.8280012376487306,
+      "mean": 0.6558848801109448,
+      "std": 0.049430652725676705
+    },
+    "d_fake_prob": {
+      "first": 0.1857684169633597,
+      "last": 0.36906997918588713,
+      "min": 0.1857684169633597,
+      "max": 0.37366788891165514,
+      "mean": 0.34392315163236464,
+      "std": 0.048358081429633916
+    },
+    "best_epoch_row": {
+      "epoch": 30,
+      "g_loss": 1.2070095267977035,
+      "d_loss": 0.5271373378549303,
+      "d_loss_real": 0.5306309285845076,
+      "d_loss_fake": 0.5236437469380243,
+      "d_real_prob": 0.6306823179291013,
+      "d_fake_prob": 0.36906997918588713,
+      "fixed_pixel_std": 0.2650659074791526,
+      "fixed_pairwise_l1": 0.27308839923323713,
+      "val_fid": 27.57159376783585,
+      "train_time_s": 11.99685373300008,
+      "epoch_wall_time_s": 40.269019396999965,
+      "num_samples": 56000,
+      "num_batches": 438
+    }
+  },
+  "timing": {
+    "total_train_time_s": 367.24605223600025,
+    "total_epoch_wall_time_s": 529.7788333570002,
+    "mean_train_time_per_epoch_s": 12.241535074533342,
+    "mean_epoch_wall_time_s": 17.65929444523334,
+    "definitions": {
+      "train_time_s": "batch loop only (CUDA synchronized)",
+      "epoch_wall_time_s": "training + fixed-noise diagnostics + scheduled validation FID; excludes checkpoint/CSV writes"
+    },
+    "resumed_run": false
+  },
+  "diversity_diagnostics": {
+    "fixed_noise_seed": 5042,
+    "num_fixed_noise": 64,
+    "pixel_std_by_epoch": [
+      0.23209199681853032,
+      0.25419963797409184,
+      0.25794390324472644,
+      0.26238721413724303,
+      0.26003174820489977,
+      0.26595185947533295,
+      0.2605306854610438,
+      0.2667526662395136,
+      0.2662512453652579,
+      0.26708287942160586,
+      0.26764632589570464,
+      0.2596140157270462,
+      0.2697060629629749,
+      0.26932712734677927,
+      0.26309210162195307,
+      0.2683663866608503,
+      0.2570631567414673,
+      0.26580284739115695,
+      0.2597920037594136,
+      0.264414419948518,
+      0.2651326024929981,
+      0.2577248708740695,
+      0.2528777289614795,
+      0.264616387955608,
+      0.2661786859915795,
+      0.26067392860496297,
+      0.2621218299671457,
+      0.2575120995420683,
+      0.26033819789111806,
+      0.2650659074791526
+    ],
+    "pairwise_l1_by_epoch": [
+      0.24916279159726815,
+      0.26499845632986996,
+      0.26979134507878305,
+      0.274111755547899,
+      0.26956893177603086,
+      0.27573281467645144,
+      0.2698945274827816,
+      0.27519997099198684,
+      0.27382263830564796,
+      0.27499294594112916,
+      0.2743526553895939,
+      0.26733227653241787,
+      0.27742488044931046,
+      0.2747422280233531,
+      0.2683842199407332,
+      0.273940318575036,
+      0.2646127942382391,
+      0.2720363562442284,
+      0.26638349472526385,
+      0.27170143634898697,
+      0.27184339366370297,
+      0.2637576761525858,
+      0.2602924505493753,
+      0.27127210652104367,
+      0.27261322653765446,
+      0.2677962860014232,
+      0.2695158136939197,
+      0.2655603843238425,
+      0.2680136809687595,
+      0.27308839923323713
+    ],
+    "pixel_std_at_best_epoch": 0.2650659074791526,
+    "pairwise_l1_at_best_epoch": 0.27308839923323713,
+    "definitions": {
+      "num_fixed_noise": 64,
+      "progression_epochs": [
+        1,
+        5,
+        10,
+        15,
+        20,
+        25,
+        30
+      ],
+      "progression_images_per_epoch": 16,
+      "pixel_std": "mean over pixels of the per-pixel standard deviation (population) across the 64 fixed-noise images, [0,1] scale",
+      "pairwise_l1": "mean over all 2,016 unordered image pairs of the mean absolute per-pixel difference, [0,1] scale"
+    },
+    "caveat": "Heuristic pixel-space diversity signals only. They cannot prove or rule out mode collapse and do not measure mode coverage."
+  },
+  "inference_latency": {
+    "batch_size": 64,
+    "warmup_runs": 20,
+    "timed_runs": 100,
+    "mean_ms_per_batch": 3.4272882999880494,
+    "std_ms_per_batch": 1.0886834346753442,
+    "median_ms_per_batch": 3.0411359999789056,
+    "min_ms_per_batch": 2.9402679999748216,
+    "max_ms_per_batch": 6.593059000124413,
+    "mean_ms_per_image": 0.05355137968731327,
+    "device": "cuda",
+    "gpu_name": "Tesla T4",
+    "torch_version": "2.14.1+cu130",
+    "scope": "Generator forward pass only; no FID, no postprocessing, no host transfer",
+    "note": "Hardware dependent: compare only across runs on the same GPU/runtime."
+  },
+  "latent_inversion_interpolation": {
+    "method": "approximate latent inversion (not a learned encoder) + linear interpolation in z",
+    "alphas": [
+      0.0,
+      0.2,
+      0.4,
+      0.6,
+      0.8,
+      1.0
+    ],
+    "num_steps": 6,
+    "inversion_objective": "MSE((G(z)+1)/2, target) + 1e-4 * mean(z^2)",
+    "restarts_per_endpoint": 4,
+    "steps_per_restart": 400,
+    "optimizer": "Adam",
+    "lr": 0.05,
+    "latent_reg": 0.0001,
+    "generator_checkpoint_epoch": 30,
+    "endpoints": [
+      {
+        "endpoint": "A",
+        "class_id": 0,
+        "class_name": "T-shirt/top",
+        "test_split_position": 0,
+        "pooled_index": 39323,
+        "source_dataset": "Fashion-MNIST official train",
+        "source_index": 39323,
+        "selected_restart": 3,
+        "final_mse": 0.004937941208481789,
+        "final_objective": 0.005127969828248024,
+        "latent_l2_norm": 13.785086631774902,
+        "restarts": [
+          {
+            "restart": 0,
+            "seed": 9042,
+            "final_objective": 0.005313456332683563,
+            "final_mse": 0.005156949162483215,
+            "latent_l2_norm": 12.510282516479492
+          },
+          {
+            "restart": 1,
+            "seed": 9043,
+            "final_objective": 0.006225424798578024,
+            "final_mse": 0.0060844323597848415,
+            "latent_l2_norm": 11.874024391174316
+          },
+          {
+            "restart": 2,
+            "seed": 9044,
+            "final_objective": 0.006628563703596592,
+            "final_mse": 0.00648427102714777,
+            "latent_l2_norm": 12.012188911437988
+          },
+          {
+            "restart": 3,
+            "seed": 9045,
+            "final_objective": 0.005127969828248024,
+            "final_mse": 0.004937941208481789,
+            "latent_l2_norm": 13.785086631774902
+          }
+        ]
+      },
+      {
+        "endpoint": "B",
+        "class_id": 1,
+        "class_name": "Trouser",
+        "test_split_position": 3,
+        "pooled_index": 6906,
+        "source_dataset": "Fashion-MNIST official train",
+        "source_index": 6906,
+        "selected_restart": 1,
+        "final_mse": 0.002357888501137495,
+        "final_objective": 0.0024335532180964946,
+        "latent_l2_norm": 8.69854736328125,
+        "restarts": [
+          {
+            "restart": 0,
+            "seed": 9142,
+            "final_objective": 0.002696544835343957,
+            "final_mse": 0.0026329776737838984,
+            "latent_l2_norm": 7.972901821136475
+          },
+          {
+            "restart": 1,
+            "seed": 9143,
+            "final_objective": 0.0024335532180964946,
+            "final_mse": 0.002357888501137495,
+            "latent_l2_norm": 8.69854736328125
+          },
+          {
+            "restart": 2,
+            "seed": 9144,
+            "final_objective": 0.003676723112165928,
+            "final_mse": 0.0035807425156235695,
+            "latent_l2_norm": 9.796968460083008
+          },
+          {
+            "restart": 3,
+            "seed": 9145,
+            "final_objective": 0.002440043552964926,
+            "final_mse": 0.0023499182425439358,
+            "latent_l2_norm": 9.49343490600586
+          }
+        ]
+      }
+    ],
+    "interpolated_latent_l2_norms": [
+      13.785086631774902,
+      11.317021369934082,
+      9.255362510681152,
+      7.923947811126709,
+      7.710811138153076,
+      8.69854736328125
+    ]
+  },
+  "environment": {
+    "python": "3.13.16",
+    "platform": "Linux-6.6.159+-x86_64-with-glibc2.39",
+    "torch": "2.14.1+cu130",
+    "torchvision": "0.29.1+cu130",
+    "numpy": "2.4.6",
+    "scipy": "1.16.3",
+    "scikit_image": "0.25.2",
+    "tqdm": "4.67.3",
+    "matplotlib": "3.10.0",
+    "pytorch_fid": "0.3.0",
+    "cuda_runtime": "13.0",
+    "cudnn": 92800,
+    "device": "cuda",
+    "gpu_name": "Tesla T4"
+  },
+  "artifacts": {
+    "results/best_model.pth": "/content/drive/MyDrive/generative-model-comparison/05_dcgan/results/best_model.pth",
+    "results/checkpoints/last_checkpoint.pth": "/content/drive/MyDrive/generative-model-comparison/05_dcgan/results/checkpoints/last_checkpoint.pth",
+    "results/metrics.json": "/content/drive/MyDrive/generative-model-comparison/05_dcgan/results/metrics.json",
+    "results/training_history.csv": "/content/drive/MyDrive/generative-model-comparison/05_dcgan/results/training_history.csv",
+    "results/experiment_config.json": "/content/drive/MyDrive/generative-model-comparison/05_dcgan/results/experiment_config.json",
+    "results/split_report.json": "/content/drive/MyDrive/generative-model-comparison/05_dcgan/results/split_report.json",
+    "results/figures/training_curves.png": "/content/drive/MyDrive/generative-model-comparison/05_dcgan/results/figures/training_curves.png",
+    "results/figures/random_samples_4x4.png": "/content/drive/MyDrive/generative-model-comparison/05_dcgan/results/figures/random_samples_4x4.png",
+    "results/figures/training_sample_progression.png": "/content/drive/MyDrive/generative-model-comparison/05_dcgan/results/figures/training_sample_progression.png",
+    "results/figures/latent_interpolation.png": "/content/drive/MyDrive/generative-model-comparison/05_dcgan/results/figures/latent_interpolation.png",
+    "results/figures/latent_inversion_endpoints.png": "/content/drive/MyDrive/generative-model-comparison/05_dcgan/results/figures/latent_inversion_endpoints.png"
+  },
+  "storage_note": "Dataset cache and .pth checkpoints stay in Google Drive; notebook, JSON, CSV and figures may be committed."
+}

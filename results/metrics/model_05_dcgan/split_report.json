@@ -1,0 +1,120 @@
+{
+  "dataset": "Fashion-MNIST",
+  "pool_order": "official train=True (60,000) followed by official train=False (10,000)",
+  "label_source": "fashion_train.targets.numpy().astype(np.int64) then fashion_test.targets.numpy().astype(np.int64)",
+  "procedure": [
+    "rng = np.random.default_rng(42)",
+    "for class_id in 0..9: class_indices = np.flatnonzero(labels == class_id).copy(); rng.shuffle(class_indices)",
+    "train = class_indices[:5600], val = class_indices[5600:6300], test = class_indices[6300:]",
+    "concatenate each split as int64",
+    "rng.shuffle(train); rng.shuffle(val); rng.shuffle(test)"
+  ],
+  "seed": 42,
+  "totals": {
+    "train": 56000,
+    "val": 7000,
+    "test": 7000,
+    "pooled": 70000
+  },
+  "per_class_counts": {
+    "train": {
+      "0": 5600,
+      "1": 5600,
+      "2": 5600,
+      "3": 5600,
+      "4": 5600,
+      "5": 5600,
+      "6": 5600,
+      "7": 5600,
+      "8": 5600,
+      "9": 5600
+    },
+    "val": {
+      "0": 700,
+      "1": 700,
+      "2": 700,
+      "3": 700,
+      "4": 700,
+      "5": 700,
+      "6": 700,
+      "7": 700,
+      "8": 700,
+      "9": 700
+    },
+    "test": {
+      "0": 700,
+      "1": 700,
+      "2": 700,
+      "3": 700,
+      "4": 700,
+      "5": 700,
+      "6": 700,
+      "7": 700,
+      "8": 700,
+      "9": 700
+    }
+  },
+  "class_names": [
+    "T-shirt/top",
+    "Trouser",
+    "Pullover",
+    "Dress",
+    "Coat",
+    "Sandal",
+    "Shirt",
+    "Sneaker",
+    "Bag",
+    "Ankle boot"
+  ],
+  "sha256_int64_index_bytes": {
+    "train": "33ea53524b4322bff6a3800d5f997fb49a2c3109cc676bcec3f5bd75614d563f",
+    "val": "ec0ca9f1abc64ba260835d8b8ade0d19c59aed038153fbab1103386380698254",
+    "test": "e10a9ab4471795dfab37b6b9a652c9a27f56343cea3a08bb82b97de2332bc3a1"
+  },
+  "hash_method": "hashlib.sha256(np.ascontiguousarray(indices, dtype=np.int64).tobytes())",
+  "byteorder": "little",
+  "checks": {
+    "unique": true,
+    "pairwise_disjoint": true,
+    "exact_per_class_counts": true,
+    "covers_all_70000": true
+  },
+  "first_10_indices": {
+    "train": [
+      25357,
+      32095,
+      6265,
+      15708,
+      27000,
+      29070,
+      18511,
+      56435,
+      48345,
+      66817
+    ],
+    "val": [
+      68626,
+      60374,
+      69770,
+      57746,
+      6462,
+      8057,
+      46319,
+      18947,
+      40174,
+      35189
+    ],
+    "test": [
+      39323,
+      42925,
+      61447,
+      6906,
+      35128,
+      15479,
+      38125,
+      62313,
+      56330,
+      40588
+    ]
+  }
+}
