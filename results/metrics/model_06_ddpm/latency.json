@@ -1,0 +1,38 @@
+{
+  "definition": "complete DDPM ancestral reverse process, all T=1000 steps, batch size 64, from x_T ~ N(0,I) to x_0 (not a single U-Net forward call)",
+  "batch_size": 64,
+  "reverse_steps": 1000,
+  "warmup_runs": 1,
+  "timed_runs": 3,
+  "per_batch_ms_runs": [
+    16195.69578499977,
+    16044.370841999807,
+    15715.392857000097
+  ],
+  "per_batch_ms_mean": 15985.153161333224,
+  "per_batch_ms_std": 245.5662353396979,
+  "per_batch_ms_median": 16044.370841999807,
+  "per_batch_ms_min": 15715.392857000097,
+  "per_batch_ms_max": 16195.69578499977,
+  "per_image_ms_mean": 249.76801814583163,
+  "per_reverse_step_ms_mean": 15.985153161333225,
+  "std_ddof": 1,
+  "cuda_synchronized": true,
+  "timer": "time.perf_counter",
+  "precision": "float32",
+  "inference_mode": "torch.no_grad, model.eval()",
+  "seed": 3003,
+  "best_epoch": 29,
+  "hardware": {
+    "device": "cuda",
+    "gpu_name": "Tesla T4",
+    "gpu_compute_capability": "7.5",
+    "gpu_total_memory_gb": 14.56,
+    "torch": "2.14.1+cu130",
+    "torch_cuda_version": "13.0",
+    "cudnn_version": 92800,
+    "python": "3.13.16",
+    "platform": "Linux-6.6.159+-x86_64-with-glibc2.39"
+  },
+  "comparability_note": "Full 1,000-step reverse process; do not compare as if it were a one-pass generator call."
+}

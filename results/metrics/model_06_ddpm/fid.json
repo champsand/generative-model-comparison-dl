@@ -1,0 +1,22 @@
+{
+  "fid": 20.74848332167909,
+  "fid_crosscheck_pytorch_fid": 20.74848332167909,
+  "n_real": 7000,
+  "n_generated": 7000,
+  "real_set": "project stratified test split (7,000 images, 700/class); official test partition NOT used",
+  "real_test_sha256": "e10a9ab4471795dfab37b6b9a652c9a27f56343cea3a08bb82b97de2332bc3a1",
+  "generated_seed": 2025,
+  "generation_T": 1000,
+  "sampling_wall_clock_sec": 1734.506929173,
+  "generation_batch_size": 64,
+  "feature_extraction_sec": 56.99082797099982,
+  "feature_extractor": "pytorch-fid 0.3.0 InceptionV3, use_fid_inception=True, pool3 (2048-d)",
+  "preprocessing": "canonical [0,1] grayscale repeated to 3 channels; wrapper bilinear resize to 299x299 (align_corners=False) and internal [0,1]->[-1,1] normalization",
+  "statistics_dtype": "float64",
+  "frechet_info": {
+    "offset_eps_used": 0.0
+  },
+  "best_epoch": 29,
+  "best_checkpoint_sha256": "1d3b7de6c44b2d725491cc2ae268355edb5a0b7973c5aa5e0f5d016e7182f2e6",
+  "interpretation": "ImageNet-trained Inception features on upsampled grayscale Fashion-MNIST; use as a relative comparison within this project only."
+}

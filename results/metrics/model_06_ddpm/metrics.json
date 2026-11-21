@@ -1,0 +1,143 @@
+{
+  "model_id": "06_ddpm",
+  "model_name": "Denoising Diffusion Probabilistic Model (DDPM)",
+  "smoke_test": false,
+  "results_valid_for_comparison": true,
+  "status_note": "Official full run.",
+  "dataset": {
+    "name": "Fashion-MNIST",
+    "pooled_images": 70000,
+    "train": 56000,
+    "validation": 7000,
+    "test": 7000,
+    "official_test_partition_retained": false,
+    "split_sha256": {
+      "train": "33ea53524b4322bff6a3800d5f997fb49a2c3109cc676bcec3f5bd75614d563f",
+      "validation": "ec0ca9f1abc64ba260835d8b8ade0d19c59aed038153fbab1103386380698254",
+      "test": "e10a9ab4471795dfab37b6b9a652c9a27f56343cea3a08bb82b97de2332bc3a1"
+    },
+    "train_images_used": 56000,
+    "val_images_used": 7000
+  },
+  "n_trainable_params": 2863393,
+  "diffusion": {
+    "T": 1000,
+    "beta_schedule": "linear",
+    "beta_start": 0.0001,
+    "beta_end": 0.02,
+    "objective": "epsilon-prediction MSE",
+    "sampler": "ancestral DDPM with posterior mean and posterior variance beta_tilde_t",
+    "clip_x0_in_sampling": true
+  },
+  "training": {
+    "epochs_completed": 30,
+    "batch_size": 128,
+    "lr": 0.0002,
+    "optimizer": "Adam",
+    "grad_clip_norm": 1.0,
+    "final_train_eps_mse": 0.038143197259732656,
+    "final_val_eps_mse": 0.0362599177235417,
+    "total_train_val_time_sec": 1281.4044473629992
+  },
+  "checkpoint_selection": {
+    "criterion": "lowest deterministic validation epsilon-MSE (fixed timesteps and noise); test data never used",
+    "best_epoch": 29,
+    "best_val_eps_mse": 0.03596466931935302,
+    "best_checkpoint_sha256": "1d3b7de6c44b2d725491cc2ae268355edb5a0b7973c5aa5e0f5d016e7182f2e6",
+    "note": "Lower validation epsilon-MSE is a training-objective criterion, not a guarantee of lower FID."
+  },
+  "fid": 20.74848332167909,
+  "fid_status": "computed",
+  "fid_details": {
+    "fid": 20.74848332167909,
+    "fid_crosscheck_pytorch_fid": 20.74848332167909,
+    "n_real": 7000,
+    "n_generated": 7000,
+    "real_set": "project stratified test split (7,000 images, 700/class); official test partition NOT used",
+    "real_test_sha256": "e10a9ab4471795dfab37b6b9a652c9a27f56343cea3a08bb82b97de2332bc3a1",
+    "generated_seed": 2025,
+    "generation_T": 1000,
+    "sampling_wall_clock_sec": 1734.506929173,
+    "generation_batch_size": 64,
+    "feature_extraction_sec": 56.99082797099982,
+    "feature_extractor": "pytorch-fid 0.3.0 InceptionV3, use_fid_inception=True, pool3 (2048-d)",
+    "preprocessing": "canonical [0,1] grayscale repeated to 3 channels; wrapper bilinear resize to 299x299 (align_corners=False) and internal [0,1]->[-1,1] normalization",
+    "statistics_dtype": "float64",
+    "frechet_info": {
+      "offset_eps_used": 0.0
+    },
+    "best_epoch": 29,
+    "best_checkpoint_sha256": "1d3b7de6c44b2d725491cc2ae268355edb5a0b7973c5aa5e0f5d016e7182f2e6",
+    "interpretation": "ImageNet-trained Inception features on upsampled grayscale Fashion-MNIST; use as a relative comparison within this project only."
+  },
+  "inference_latency": {
+    "definition": "complete DDPM ancestral reverse process, all T=1000 steps, batch size 64, from x_T ~ N(0,I) to x_0 (not a single U-Net forward call)",
+    "batch_size": 64,
+    "reverse_steps": 1000,
+    "warmup_runs": 1,
+    "timed_runs": 3,
+    "per_batch_ms_runs": [
+      16195.69578499977,
+      16044.370841999807,
+      15715.392857000097
+    ],
+    "per_batch_ms_mean": 15985.153161333224,
+    "per_batch_ms_std": 245.5662353396979,
+    "per_batch_ms_median": 16044.370841999807,
+    "per_batch_ms_min": 15715.392857000097,
+    "per_batch_ms_max": 16195.69578499977,
+    "per_image_ms_mean": 249.76801814583163,
+    "per_reverse_step_ms_mean": 15.985153161333225,
+    "std_ddof": 1,
+    "cuda_synchronized": true,
+    "timer": "time.perf_counter",
+    "precision": "float32",
+    "inference_mode": "torch.no_grad, model.eval()",
+    "seed": 3003,
+    "best_epoch": 29,
+    "hardware": {
+      "device": "cuda",
+      "gpu_name": "Tesla T4",
+      "gpu_compute_capability": "7.5",
+      "gpu_total_memory_gb": 14.56,
+      "torch": "2.14.1+cu130",
+      "torch_cuda_version": "13.0",
+      "cudnn_version": 92800,
+      "python": "3.13.16",
+      "platform": "Linux-6.6.159+-x86_64-with-glibc2.39"
+    },
+    "comparability_note": "Full 1,000-step reverse process; do not compare as if it were a one-pass generator call."
+  },
+  "inference_latency_status": "computed",
+  "test_mse": "N/A",
+  "test_psnr": "N/A",
+  "test_ssim": "N/A",
+  "latent_interpolation": "N/A",
+  "not_applicable_reasons": {
+    "test_mse": "N/A - an unconditional DDPM has no input -> reconstruction pathway, so there is no reconstruction to compare.",
+    "test_psnr": "N/A - no reconstruction pathway (unconditional DDPM); PSNR requires paired input/reconstruction.",
+    "test_ssim": "N/A - no reconstruction pathway (unconditional DDPM); SSIM requires paired input/reconstruction.",
+    "latent_interpolation": "N/A - DDPM has no fixed encoder latent space for the project's interpolation experiment (x_T is same-dimensional noise, not a learned encoding of an input)."
+  },
+  "environment": {
+    "python": "3.13.16",
+    "platform": "Linux-6.6.159+-x86_64-with-glibc2.39",
+    "torch": "2.14.1+cu130",
+    "torchvision": "0.29.1+cu130",
+    "numpy": "2.4.6",
+    "scipy": "1.16.3",
+    "pytorch_fid": "0.3.0",
+    "cuda_available": true,
+    "torch_cuda_version": "13.0",
+    "cudnn_version": 92800,
+    "cudnn_deterministic": true,
+    "cudnn_benchmark": false,
+    "device": "cuda",
+    "in_colab": true,
+    "gpu_name": "Tesla T4",
+    "gpu_count": 1,
+    "gpu_total_memory_gb": 14.56,
+    "gpu_compute_capability": "7.5"
+  },
+  "written_at_utc": "2026-11-19T15:30:08.349352+00:00"
+}
