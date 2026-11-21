@@ -1,0 +1,229 @@
+{
+  "model": "04_vae",
+  "note": "All values produced by executing this notebook.",
+  "trainable_params": 451984,
+  "best_checkpoint": {
+    "epoch": 30,
+    "selection_metric": "lowest validation total objective",
+    "val_total": 24.292047454833984,
+    "val_recon_sse": 16.36649794442313,
+    "val_kl": 7.92554944065639
+  },
+  "training": {
+    "epochs_completed": 30,
+    "beta": 1.0,
+    "kl_warmup_epochs": 0,
+    "final_epoch": {
+      "epoch": 30,
+      "beta": 1.0,
+      "train_total": 24.45077345929827,
+      "train_recon_sse": 16.283749553135465,
+      "train_kl": 8.16702392251151,
+      "val_total": 24.292047454833984,
+      "val_recon_sse": 16.36649794442313,
+      "val_kl": 7.92554944065639,
+      "val_fid": 91.97574801874134,
+      "train_time_s": 7.5606971160000285,
+      "val_time_s": 1.2618167840000751,
+      "val_fid_time_s": 28.251821359000132,
+      "epoch_wall_time_s": 37.09806258399999,
+      "is_best": true
+    },
+    "total_train_wall_time_s": 435.9041630009999
+  },
+  "validation_fid_by_epoch": {
+    "5": 130.85082895010316,
+    "10": 110.48881615532915,
+    "15": 102.75948401898552,
+    "20": 95.7290263152309,
+    "25": 93.2558163193413,
+    "30": 91.97574801874134
+  },
+  "validation_fid_settings": {
+    "n_real": 3000,
+    "n_generated": 3000,
+    "feature_dim": 2048,
+    "latent_seed": 7042,
+    "role": "diagnostic only"
+  },
+  "test_reconstruction": {
+    "n_images": 7000,
+    "n_pixels": 5488000,
+    "total_squared_error": 93977.23886688646,
+    "mse": 0.0171241324465901,
+    "psnr_db": 17.663914217743798,
+    "ssim_mean": 0.5824995837333303,
+    "ssim_std": 0.19669770702204423,
+    "ssim_count": 7000,
+    "ssim_settings": {
+      "data_range": 1.0,
+      "gaussian_weights": true,
+      "sigma": 1.5,
+      "win_size": 11,
+      "use_sample_covariance": false
+    },
+    "mean_kl_diagnostic": 7.933291106911077,
+    "reconstruction": "decode(mu) (posterior mean)",
+    "checkpoint_epoch": 30,
+    "eval_time_s": 6.325760461999835
+  },
+  "test_fid": {
+    "fid": 89.46050485739553,
+    "n_real": 7000,
+    "n_generated": 7000,
+    "feature_dim": 2048,
+    "real_source": "held-out test split (7000 images); no training images",
+    "generated_source": "z ~ N(0, I), decoded by best checkpoint",
+    "latent_seed": 8042,
+    "inception": "pytorch-fid 0.3.0 FID InceptionV3, pool3",
+    "statistics_dtype": "float64",
+    "checkpoint_epoch": 30,
+    "time_s": 68.85532322900008,
+    "limitations": "ImageNet-trained Inception on upsampled grayscale 28x28 images; compare only within this protocol."
+  },
+  "latency": {
+    "definition": "prior sampling + decoder forward pass; encoder and FID excluded",
+    "batch_size": 64,
+    "warmup_runs": 20,
+    "timed_runs": 100,
+    "mean_ms_per_batch": 0.20801542999606681,
+    "std_ms_per_batch": 0.035983238426595024,
+    "std_definition": "sample standard deviation (ddof=1)",
+    "median_ms_per_batch": 0.19650199999432516,
+    "mean_ms_per_image": 0.003250241093688544,
+    "no_grad": true,
+    "cuda_synchronize": true,
+    "device": "cuda",
+    "hardware": "Tesla T4",
+    "torch": "2.14.1+cu130"
+  },
+  "figures": {
+    "training_curves": "results/figures/training_curves.png",
+    "random_samples_4x4": {
+      "path": "results/figures/random_samples_4x4.png",
+      "n_samples": 16,
+      "latent_seed": 9042,
+      "grid": "4x4"
+    },
+    "reconstruction_comparison": {
+      "path": "results/figures/reconstruction_comparison.png",
+      "samples": [
+        {
+          "test_split_position": 0,
+          "pooled_index": 39323,
+          "class_id": 0,
+          "class_name": "T-shirt/top",
+          "official_source": "train",
+          "official_source_index": 39323
+        },
+        {
+          "test_split_position": 3,
+          "pooled_index": 6906,
+          "class_id": 1,
+          "class_name": "Trouser",
+          "official_source": "train",
+          "official_source_index": 6906
+        },
+        {
+          "test_split_position": 17,
+          "pooled_index": 66404,
+          "class_id": 2,
+          "class_name": "Pullover",
+          "official_source": "test",
+          "official_source_index": 6404
+        },
+        {
+          "test_split_position": 5,
+          "pooled_index": 15479,
+          "class_id": 3,
+          "class_name": "Dress",
+          "official_source": "train",
+          "official_source_index": 15479
+        },
+        {
+          "test_split_position": 12,
+          "pooled_index": 7166,
+          "class_id": 4,
+          "class_name": "Coat",
+          "official_source": "train",
+          "official_source_index": 7166
+        },
+        {
+          "test_split_position": 1,
+          "pooled_index": 42925,
+          "class_id": 5,
+          "class_name": "Sandal",
+          "official_source": "train",
+          "official_source_index": 42925
+        },
+        {
+          "test_split_position": 9,
+          "pooled_index": 40588,
+          "class_id": 6,
+          "class_name": "Shirt",
+          "official_source": "train",
+          "official_source_index": 40588
+        },
+        {
+          "test_split_position": 14,
+          "pooled_index": 48392,
+          "class_id": 7,
+          "class_name": "Sneaker",
+          "official_source": "train",
+          "official_source_index": 48392
+        }
+      ]
+    },
+    "latent_interpolation": {
+      "path": "results/figures/latent_interpolation.png",
+      "endpoint_a": {
+        "test_split_position": 0,
+        "pooled_index": 39323,
+        "class_id": 0,
+        "class_name": "T-shirt/top",
+        "official_source": "train",
+        "official_source_index": 39323
+      },
+      "endpoint_b": {
+        "test_split_position": 3,
+        "pooled_index": 6906,
+        "class_id": 1,
+        "class_name": "Trouser",
+        "official_source": "train",
+        "official_source_index": 6906
+      },
+      "alphas": [
+        0.0,
+        0.2,
+        0.4,
+        0.6,
+        0.8,
+        1.0
+      ],
+      "latent": "posterior means; z = (1 - alpha) * mu_A + alpha * mu_B"
+    }
+  },
+  "split_hashes": {
+    "train_sha256": "33ea53524b4322bff6a3800d5f997fb49a2c3109cc676bcec3f5bd75614d563f",
+    "val_sha256": "ec0ca9f1abc64ba260835d8b8ade0d19c59aed038153fbab1103386380698254",
+    "test_sha256": "e10a9ab4471795dfab37b6b9a652c9a27f56343cea3a08bb82b97de2332bc3a1",
+    "pooled_labels_sha256": "138bc5cbc39ee06b83e673e3675e93334169ceae7849de38016fa7ef57c6ffba"
+  },
+  "environment": {
+    "in_colab": true,
+    "python": "3.13.16",
+    "platform": "Linux-6.6.159+-x86_64-with-glibc2.39",
+    "torch": "2.14.1+cu130",
+    "torchvision": "0.29.1+cu130",
+    "numpy": "2.4.6",
+    "scipy": "1.16.3",
+    "scikit_image": "0.25.2",
+    "matplotlib": "3.10.0",
+    "pytorch_fid": "0.3.0",
+    "cuda_available": true,
+    "cuda_version": "13.0",
+    "cudnn_version": 92800,
+    "device": "cuda",
+    "hardware": "Tesla T4"
+  }
+}

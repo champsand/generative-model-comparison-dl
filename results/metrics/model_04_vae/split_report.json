@@ -1,0 +1,119 @@
+{
+  "seed": 42,
+  "rng": "np.random.default_rng(42)",
+  "pooling_order": [
+    "official_train (60000)",
+    "official_test (10000)"
+  ],
+  "algorithm": [
+    "concatenate train and test targets as int64",
+    "rng = np.random.default_rng(42)",
+    "for class_id in 0..9: idx = np.flatnonzero(labels == class_id).copy(); rng.shuffle(idx); first 5600 -> train, next 700 -> val, remaining 700 -> test",
+    "concatenate each split as int64",
+    "rng.shuffle(train); rng.shuffle(val); rng.shuffle(test)"
+  ],
+  "totals": {
+    "train": 56000,
+    "val": 7000,
+    "test": 7000
+  },
+  "per_class_counts": {
+    "train": [
+      5600,
+      5600,
+      5600,
+      5600,
+      5600,
+      5600,
+      5600,
+      5600,
+      5600,
+      5600
+    ],
+    "val": [
+      700,
+      700,
+      700,
+      700,
+      700,
+      700,
+      700,
+      700,
+      700,
+      700
+    ],
+    "test": [
+      700,
+      700,
+      700,
+      700,
+      700,
+      700,
+      700,
+      700,
+      700,
+      700
+    ]
+  },
+  "checks": {
+    "dtype_int64": true,
+    "train_total_56000": true,
+    "val_total_7000": true,
+    "test_total_7000": true,
+    "train_per_class_5600": true,
+    "val_per_class_700": true,
+    "test_per_class_700": true,
+    "no_duplicates_train": true,
+    "no_duplicates_val": true,
+    "no_duplicates_test": true,
+    "disjoint_train_val": true,
+    "disjoint_train_test": true,
+    "disjoint_val_test": true,
+    "full_coverage_70000": true
+  },
+  "hash_method": "sha256 of np.ascontiguousarray(indices, dtype=np.int64).tobytes()",
+  "hashes": {
+    "train_sha256": "33ea53524b4322bff6a3800d5f997fb49a2c3109cc676bcec3f5bd75614d563f",
+    "val_sha256": "ec0ca9f1abc64ba260835d8b8ade0d19c59aed038153fbab1103386380698254",
+    "test_sha256": "e10a9ab4471795dfab37b6b9a652c9a27f56343cea3a08bb82b97de2332bc3a1",
+    "pooled_labels_sha256": "138bc5cbc39ee06b83e673e3675e93334169ceae7849de38016fa7ef57c6ffba"
+  },
+  "first_10_indices": {
+    "train": [
+      25357,
+      32095,
+      6265,
+      15708,
+      27000,
+      29070,
+      18511,
+      56435,
+      48345,
+      66817
+    ],
+    "val": [
+      68626,
+      60374,
+      69770,
+      57746,
+      6462,
+      8057,
+      46319,
+      18947,
+      40174,
+      35189
+    ],
+    "test": [
+      39323,
+      42925,
+      61447,
+      6906,
+      35128,
+      15479,
+      38125,
+      62313,
+      56330,
+      40588
+    ]
+  }
+}
