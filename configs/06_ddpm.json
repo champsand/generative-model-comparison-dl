@@ -1,0 +1,385 @@
+{
+  "config": {
+    "model_id": "06_ddpm",
+    "model_name": "Denoising Diffusion Probabilistic Model (DDPM)",
+    "seed": 42,
+    "split_seed": 42,
+    "n_train_per_class": 5600,
+    "n_val_per_class": 700,
+    "n_test_per_class": 700,
+    "T": 1000,
+    "beta_schedule": "linear",
+    "beta_start": 0.0001,
+    "beta_end": 0.02,
+    "prediction_target": "epsilon",
+    "loss": "epsilon-MSE",
+    "clip_x0_in_sampling": true,
+    "reverse_variance": "posterior (beta_tilde_t)",
+    "in_channels": 1,
+    "base_channels": 32,
+    "channel_mult": [
+      1,
+      2,
+      4
+    ],
+    "num_res_blocks": 2,
+    "time_emb_dim": 128,
+    "groupnorm_groups": 8,
+    "dropout": 0.1,
+    "optimizer": "Adam",
+    "lr": 0.0002,
+    "adam_betas": [
+      0.9,
+      0.999
+    ],
+    "weight_decay": 0.0,
+    "batch_size": 128,
+    "epochs": 30,
+    "grad_clip_norm": 1.0,
+    "val_noise_seed": 4242,
+    "val_batch_size": 128,
+    "train_subset": null,
+    "val_subset": null,
+    "n_grid_samples": 16,
+    "grid_seed": 1001,
+    "trajectory_n_samples": 8,
+    "trajectory_steps": [
+      0,
+      200,
+      400,
+      600,
+      800,
+      1000
+    ],
+    "trajectory_seed": 1002,
+    "progression_epochs": [
+      1,
+      5,
+      10,
+      15,
+      20,
+      25,
+      30
+    ],
+    "progression_n_samples": 8,
+    "progression_seed": 1003,
+    "run_fid": true,
+    "fid_n_samples": 7000,
+    "fid_sample_seed": 2025,
+    "fid_gen_batch_size": 64,
+    "fid_inception_batch_size": 64,
+    "fid_dims": 2048,
+    "save_fid_features": true,
+    "run_latency": true,
+    "latency_batch_size": 64,
+    "latency_warmup": 1,
+    "latency_repeats": 3,
+    "latency_seed": 3003,
+    "smoke_test": false
+  },
+  "run_mode": "new",
+  "smoke_test": false,
+  "results_valid_for_comparison": true,
+  "start_epoch": 1,
+  "n_trainable_params": 2863393,
+  "architecture_shapes_batch2": [
+    {
+      "module": "time_mlp",
+      "type": "Sequential",
+      "output_shape": [
+        2,
+        128
+      ],
+      "params": 131712
+    },
+    {
+      "module": "in_conv",
+      "type": "Conv2d",
+      "output_shape": [
+        2,
+        32,
+        28,
+        28
+      ],
+      "params": 320
+    },
+    {
+      "module": "down_blocks.0.0",
+      "type": "ResBlock",
+      "output_shape": [
+        2,
+        32,
+        28,
+        28
+      ],
+      "params": 22752
+    },
+    {
+      "module": "down_blocks.0.1",
+      "type": "ResBlock",
+      "output_shape": [
+        2,
+        32,
+        28,
+        28
+      ],
+      "params": 22752
+    },
+    {
+      "module": "downsamples.0",
+      "type": "Downsample",
+      "output_shape": [
+        2,
+        32,
+        14,
+        14
+      ],
+      "params": 9248
+    },
+    {
+      "module": "down_blocks.1.0",
+      "type": "ResBlock",
+      "output_shape": [
+        2,
+        64,
+        14,
+        14
+      ],
+      "params": 65984
+    },
+    {
+      "module": "down_blocks.1.1",
+      "type": "ResBlock",
+      "output_shape": [
+        2,
+        64,
+        14,
+        14
+      ],
+      "params": 82368
+    },
+    {
+      "module": "downsamples.1",
+      "type": "Downsample",
+      "output_shape": [
+        2,
+        64,
+        7,
+        7
+      ],
+      "params": 36928
+    },
+    {
+      "module": "down_blocks.2.0",
+      "type": "ResBlock",
+      "output_shape": [
+        2,
+        128,
+        7,
+        7
+      ],
+      "params": 246656
+    },
+    {
+      "module": "down_blocks.2.1",
+      "type": "ResBlock",
+      "output_shape": [
+        2,
+        128,
+        7,
+        7
+      ],
+      "params": 312192
+    },
+    {
+      "module": "downsamples.2",
+      "type": "Identity",
+      "output_shape": [
+        2,
+        128,
+        7,
+        7
+      ],
+      "params": 0
+    },
+    {
+      "module": "mid.0",
+      "type": "ResBlock",
+      "output_shape": [
+        2,
+        128,
+        7,
+        7
+      ],
+      "params": 312192
+    },
+    {
+      "module": "mid.1",
+      "type": "ResBlock",
+      "output_shape": [
+        2,
+        128,
+        7,
+        7
+      ],
+      "params": 312192
+    },
+    {
+      "module": "up_blocks.0.0",
+      "type": "ResBlock",
+      "output_shape": [
+        2,
+        128,
+        7,
+        7
+      ],
+      "params": 492800
+    },
+    {
+      "module": "up_blocks.0.1",
+      "type": "ResBlock",
+      "output_shape": [
+        2,
+        128,
+        7,
+        7
+      ],
+      "params": 312192
+    },
+    {
+      "module": "upsamples.0",
+      "type": "Upsample",
+      "output_shape": [
+        2,
+        128,
+        14,
+        14
+      ],
+      "params": 147584
+    },
+    {
+      "module": "up_blocks.1.0",
+      "type": "ResBlock",
+      "output_shape": [
+        2,
+        64,
+        14,
+        14
+      ],
+      "params": 168704
+    },
+    {
+      "module": "up_blocks.1.1",
+      "type": "ResBlock",
+      "output_shape": [
+        2,
+        64,
+        14,
+        14
+      ],
+      "params": 82368
+    },
+    {
+      "module": "upsamples.1",
+      "type": "Upsample",
+      "output_shape": [
+        2,
+        64,
+        28,
+        28
+      ],
+      "params": 36928
+    },
+    {
+      "module": "up_blocks.2.0",
+      "type": "ResBlock",
+      "output_shape": [
+        2,
+        32,
+        28,
+        28
+      ],
+      "params": 44416
+    },
+    {
+      "module": "up_blocks.2.1",
+      "type": "ResBlock",
+      "output_shape": [
+        2,
+        32,
+        28,
+        28
+      ],
+      "params": 22752
+    },
+    {
+      "module": "upsamples.2",
+      "type": "Identity",
+      "output_shape": [
+        2,
+        32,
+        28,
+        28
+      ],
+      "params": 0
+    },
+    {
+      "module": "out_conv",
+      "type": "Conv2d",
+      "output_shape": [
+        2,
+        1,
+        28,
+        28
+      ],
+      "params": 289
+    }
+  ],
+  "split_sha256": {
+    "train": "33ea53524b4322bff6a3800d5f997fb49a2c3109cc676bcec3f5bd75614d563f",
+    "validation": "ec0ca9f1abc64ba260835d8b8ade0d19c59aed038153fbab1103386380698254",
+    "test": "e10a9ab4471795dfab37b6b9a652c9a27f56343cea3a08bb82b97de2332bc3a1"
+  },
+  "environment": {
+    "python": "3.13.16",
+    "platform": "Linux-6.6.159+-x86_64-with-glibc2.39",
+    "torch": "2.14.1+cu130",
+    "torchvision": "0.29.1+cu130",
+    "numpy": "2.4.6",
+    "scipy": "1.16.3",
+    "pytorch_fid": "0.3.0",
+    "cuda_available": true,
+    "torch_cuda_version": "13.0",
+    "cudnn_version": 92800,
+    "cudnn_deterministic": true,
+    "cudnn_benchmark": false,
+    "device": "cuda",
+    "in_colab": true,
+    "gpu_name": "Tesla T4",
+    "gpu_count": 1,
+    "gpu_total_memory_gb": 14.56,
+    "gpu_compute_capability": "7.5"
+  },
+  "paths": {
+    "best_ckpt": "/content/drive/MyDrive/generative-model-comparison/06_ddpm/checkpoints/best_checkpoint.pt",
+    "last_ckpt": "/content/drive/MyDrive/generative-model-comparison/06_ddpm/checkpoints/last_checkpoint.pt",
+    "history_csv": "/content/drive/MyDrive/generative-model-comparison/06_ddpm/metrics/training_history.csv",
+    "metrics_json": "/content/drive/MyDrive/generative-model-comparison/06_ddpm/metrics/metrics.json",
+    "config_json": "/content/drive/MyDrive/generative-model-comparison/06_ddpm/metrics/resolved_config.json",
+    "split_report": "/content/drive/MyDrive/generative-model-comparison/06_ddpm/metrics/split_report.json",
+    "split_npz": "/content/drive/MyDrive/generative-model-comparison/06_ddpm/metrics/split_indices.npz",
+    "fid_stats": "/content/drive/MyDrive/generative-model-comparison/06_ddpm/metrics/fid_stats.npz",
+    "fid_features": "/content/drive/MyDrive/generative-model-comparison/06_ddpm/metrics/fid_features.npz",
+    "fid_json": "/content/drive/MyDrive/generative-model-comparison/06_ddpm/metrics/fid.json",
+    "latency_json": "/content/drive/MyDrive/generative-model-comparison/06_ddpm/metrics/latency.json",
+    "samples_16": "/content/drive/MyDrive/generative-model-comparison/06_ddpm/samples/samples_16.pt",
+    "trajectory": "/content/drive/MyDrive/generative-model-comparison/06_ddpm/samples/denoising_trajectory.pt",
+    "generated_7000": "/content/drive/MyDrive/generative-model-comparison/06_ddpm/samples/generated_7000.pt",
+    "progression_dir": "/content/drive/MyDrive/generative-model-comparison/06_ddpm/samples/progression",
+    "fig_grid": "/content/drive/MyDrive/generative-model-comparison/06_ddpm/figures/samples_grid_4x4.png",
+    "fig_trajectory": "/content/drive/MyDrive/generative-model-comparison/06_ddpm/figures/denoising_trajectory.png",
+    "fig_loss": "/content/drive/MyDrive/generative-model-comparison/06_ddpm/figures/loss_curves.png",
+    "fig_progression": "/content/drive/MyDrive/generative-model-comparison/06_ddpm/figures/sample_progression_by_epoch.png"
+  },
+  "written_at_utc": "2026-11-19T14:35:40.217813+00:00"
+}

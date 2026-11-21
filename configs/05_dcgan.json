@@ -1,0 +1,203 @@
+{
+  "model_id": "05",
+  "model_name": "DCGAN",
+  "notebook": "05_dcgan_claude.ipynb",
+  "dataset": "Fashion-MNIST",
+  "image_shape": [
+    1,
+    28,
+    28
+  ],
+  "preprocessing": "torchvision ToTensor() only; canonical [0,1]; DCGAN input x*2-1; generated output (x+1)/2",
+  "seeds": {
+    "global": 42,
+    "split": 42,
+    "train_loader_generator": 42,
+    "train_noise_generator": 1042,
+    "fixed_diagnostic_noise": 5042,
+    "val_fid_noise": 6042,
+    "test_fid_noise": 7042,
+    "random_grid_noise": 8042,
+    "inversion_restarts_base": 9042,
+    "latency_noise": 10042
+  },
+  "split": {
+    "pool_order": "official train (60,000) then official test (10,000)",
+    "per_class": {
+      "train": 5600,
+      "val": 700,
+      "test": 700
+    },
+    "totals": {
+      "train": 56000,
+      "val": 7000,
+      "test": 7000
+    }
+  },
+  "dataloader": {
+    "batch_size": 128,
+    "num_workers": 2,
+    "train_shuffle": true,
+    "val_shuffle": false,
+    "test_shuffle": false,
+    "pin_memory": true,
+    "drop_last": false
+  },
+  "architecture": {
+    "generator": [
+      "input z [B,100,1,1]",
+      "ConvTranspose2d(100,128,kernel_size=7,stride=1,padding=0,bias=False) -> [B,128,7,7]",
+      "BatchNorm2d(128)",
+      "ReLU",
+      "ConvTranspose2d(128,64,kernel_size=4,stride=2,padding=1,bias=False) -> [B,64,14,14]",
+      "BatchNorm2d(64)",
+      "ReLU",
+      "ConvTranspose2d(64,1,kernel_size=4,stride=2,padding=1,bias=False) -> [B,1,28,28]",
+      "Tanh -> [-1,1]"
+    ],
+    "discriminator": [
+      "input x [B,1,28,28] in [-1,1]",
+      "Conv2d(1,64,kernel_size=4,stride=2,padding=1,bias=False) -> [B,64,14,14]",
+      "LeakyReLU(0.2)",
+      "Conv2d(64,128,kernel_size=4,stride=2,padding=1,bias=False) -> [B,128,7,7]",
+      "BatchNorm2d(128)",
+      "LeakyReLU(0.2)",
+      "Conv2d(128,1,kernel_size=7,stride=1,padding=0,bias=True) -> [B,1,1,1] -> logit [B]",
+      "no Sigmoid: BCEWithLogitsLoss is used"
+    ],
+    "initialization": "Conv2d/ConvTranspose2d weight ~ N(0,0.02), bias = 0; BatchNorm2d weight ~ N(1,0.02), bias = 0",
+    "expected_parameter_counts": {
+      "generator": 759680,
+      "discriminator": 138625
+    }
+  },
+  "latent_dim": 100,
+  "latent_prior": "standard normal N(0, I), shape [B,100,1,1]",
+  "training": {
+    "epochs": 30,
+    "batch_size": 128,
+    "optimizer_G": {
+      "type": "Adam",
+      "lr": 0.0002,
+      "betas": [
+        0.5,
+        0.999
+      ],
+      "eps": 1e-08,
+      "weight_decay": 0.0
+    },
+    "optimizer_D": {
+      "type": "Adam",
+      "lr": 0.0002,
+      "betas": [
+        0.5,
+        0.999
+      ],
+      "eps": 1e-08,
+      "weight_decay": 0.0
+    },
+    "loss": "BCEWithLogitsLoss",
+    "d_loss": "0.5 * (BCE(D(real),1) + BCE(D(G(z).detach()),0))",
+    "g_loss": "non-saturating BCE(D(G(z)),1)",
+    "update_order": "one D update then one G update per batch",
+    "latent_noise": "fresh z ~ N(0,I) drawn from the dedicated CPU generator (seed 1042) for each update: one draw for the D update, one draw for the G update",
+    "g_update_discriminator": "D parameters frozen (requires_grad=False) and restored afterwards; D kept in train mode so its BatchNorm running statistics update on the generated batch",
+    "evaluation_mode_for_sampling": "G.eval() (BatchNorm running statistics) for diagnostics, FID, figures and latency",
+    "not_used": [
+      "lr scheduler",
+      "early stopping",
+      "label smoothing",
+      "label flipping",
+      "gradient penalty",
+      "mixed precision",
+      "gradient clipping",
+      "spectral norm",
+      "extra regularization",
+      "TF32"
+    ]
+  },
+  "diagnostics": {
+    "num_fixed_noise": 64,
+    "progression_epochs": [
+      1,
+      5,
+      10,
+      15,
+      20,
+      25,
+      30
+    ],
+    "progression_images_per_epoch": 16,
+    "pixel_std": "mean over pixels of the per-pixel standard deviation (population) across the 64 fixed-noise images, [0,1] scale",
+    "pairwise_l1": "mean over all 2,016 unordered image pairs of the mean absolute per-pixel difference, [0,1] scale"
+  },
+  "fid": {
+    "library": "pytorch-fid==0.3.0",
+    "network": "FID InceptionV3 (use_fid_inception=True), pool3 2,048-D",
+    "input": "generated/real images in [0,1], grayscale repeated to 3 channels; resize_input=True (bilinear to 299x299), normalize_input=True",
+    "statistics": "float64 mean and covariance (np.cov, rowvar=False); pytorch_fid.fid_score.calculate_frechet_distance",
+    "feature_batch_size": 64,
+    "generation_batch_size": 128,
+    "val_epochs": [
+      5,
+      10,
+      15,
+      20,
+      25,
+      30
+    ],
+    "val_num_real": 3000,
+    "val_num_generated": 3000,
+    "val_real_images": "first 3,000 indices of the shuffled validation split",
+    "val_generated_images": "fixed latent tensor of 3,000 vectors (seed 6042), reused at every scheduled epoch",
+    "test_num_real": 7000,
+    "test_num_generated": 7000,
+    "test_real_images": "all 7,000 test-split images",
+    "test_generated_images": "7,000 fresh prior samples (seed 7042) from the best generator",
+    "negative_tolerance": 1e-06,
+    "model_selection": "lowest validation FID"
+  },
+  "latent_inversion": {
+    "objective": "MSE((G(z)+1)/2, target) + 1e-4 * mean(z^2)",
+    "restarts": 4,
+    "steps_per_restart": 400,
+    "optimizer": "Adam",
+    "lr": 0.05,
+    "latent_reg": 0.0001,
+    "restart_init": "z ~ N(0,I) from CPU generator seeded INVERSION_SEED + 100*endpoint + restart",
+    "selection": "lowest final objective",
+    "endpoint_classes": [
+      0,
+      1
+    ],
+    "endpoint_selection": "first image of each class in the shuffled test-split order"
+  },
+  "interpolation": {
+    "alphas": [
+      0.0,
+      0.2,
+      0.4,
+      0.6,
+      0.8,
+      1.0
+    ],
+    "method": "linear: z = (1-alpha)*z_A + alpha*z_B"
+  },
+  "latency": {
+    "batch_size": 64,
+    "warmup_runs": 20,
+    "timed_runs": 100,
+    "scope": "Generator forward only, torch.no_grad, eval mode, same fixed z batch, CUDA synchronized"
+  },
+  "reconstruction_metrics": {
+    "mse": null,
+    "psnr": null,
+    "ssim": null,
+    "note": "Not applicable: an unconditional DCGAN has no encoder and does not reconstruct inputs."
+  },
+  "paths": {
+    "project_root": "/content/drive/MyDrive/generative-model-comparison/05_dcgan",
+    "data_dir": "/content/drive/MyDrive/generative-model-comparison/05_dcgan/data/fashion_mnist",
+    "results_dir": "/content/drive/MyDrive/generative-model-comparison/05_dcgan/results"
+  }
+}

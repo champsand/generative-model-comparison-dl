@@ -1,0 +1,159 @@
+{
+  "model_name": "04_vae",
+  "seed": 42,
+  "dataset": {
+    "name": "Fashion-MNIST",
+    "pooling": "official train (60000) then official test (10000)",
+    "n_pooled": 70000,
+    "transform": "ToTensor() only; grayscale [1,28,28] in [0,1]",
+    "split_rng": "np.random.default_rng(42)",
+    "per_class": {
+      "train": 5600,
+      "val": 700,
+      "test": 700
+    },
+    "totals": {
+      "train": 56000,
+      "val": 7000,
+      "test": 7000
+    }
+  },
+  "dataloader": {
+    "batch_size": 128,
+    "train_shuffle": true,
+    "val_shuffle": false,
+    "test_shuffle": false,
+    "train_generator": "dedicated CPU torch.Generator seeded 42",
+    "num_workers": 2,
+    "pin_memory": true
+  },
+  "architecture": {
+    "type": "fully connected VAE",
+    "encoder": [
+      "Flatten(784)",
+      "Linear(784,256)",
+      "ReLU",
+      "mu: Linear(256,64)",
+      "logvar: Linear(256,64)"
+    ],
+    "decoder": [
+      "Linear(64,256)",
+      "ReLU",
+      "Linear(256,784)",
+      "Sigmoid",
+      "Reshape[B,1,28,28]"
+    ],
+    "input_dim": 784,
+    "hidden_dim": 256,
+    "latent_dim": 64,
+    "logvar_clamp": [
+      -20.0,
+      10.0
+    ],
+    "reparameterization": "std = exp(0.5*logvar); z = mu + std*eps, eps ~ N(0,I)",
+    "deterministic_reconstruction": "decode(mu)",
+    "expected_trainable_params": 451984
+  },
+  "objective": {
+    "reconstruction": "sum of squared pixel error over 784 pixels per image, mean over batch",
+    "kl": "-0.5*sum(1 + logvar - mu^2 - exp(logvar)) over 64 dims per image, mean over batch",
+    "total": "reconstruction_sse + beta * kl",
+    "beta": 1.0,
+    "kl_warmup_epochs": 0,
+    "kl_annealing": null
+  },
+  "optimizer": {
+    "name": "Adam",
+    "lr": 0.001,
+    "betas": [
+      0.9,
+      0.999
+    ],
+    "eps": 1e-08,
+    "weight_decay": 0.0
+  },
+  "training": {
+    "epochs": 30,
+    "scheduler": null,
+    "early_stopping": false,
+    "gradient_clipping": null,
+    "mixed_precision": false,
+    "extra_regularization": null,
+    "train_eps": "random (global torch RNG)",
+    "val_eps_seed": 6042,
+    "val_eps_generator": "dedicated CPU torch.Generator reset at every validation epoch",
+    "checkpoint_selection": "lowest validation total objective"
+  },
+  "fid": {
+    "package": "pytorch-fid==0.3.0 (installed with --no-deps)",
+    "inception": "FID InceptionV3 weights, pool3",
+    "feature_dim": 2048,
+    "preprocessing": "grayscale repeated to RGB, [0,1] input, wrapper bilinear resize to 299x299 + normalisation",
+    "statistics_dtype": "float64",
+    "feature_batch_size": 64,
+    "val_every_epochs": 5,
+    "val_epochs": [
+      5,
+      10,
+      15,
+      20,
+      25,
+      30
+    ],
+    "val_n_real": 3000,
+    "val_n_generated": 3000,
+    "val_real_images": "first 3000 images of the validation split",
+    "val_latent_seed": 7042,
+    "val_fid_role": "diagnostic only; not used for checkpoint selection",
+    "test_n_real": 7000,
+    "test_n_generated": 7000,
+    "test_latent_seed": 8042
+  },
+  "reconstruction_metrics": {
+    "images": "all 7000 test images, posterior-mean reconstructions decode(mu)",
+    "mse": "global total squared error / all test pixels, float64",
+    "psnr": "10*log10(1.0/MSE)",
+    "ssim": {
+      "data_range": 1.0,
+      "gaussian_weights": true,
+      "sigma": 1.5,
+      "win_size": 11,
+      "use_sample_covariance": false
+    }
+  },
+  "figures": {
+    "random_samples": 16,
+    "random_samples_seed": 9042,
+    "reconstruction_classes": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "interpolation_classes": [
+      0,
+      1
+    ],
+    "interpolation_alphas": [
+      0.0,
+      0.2,
+      0.4,
+      0.6,
+      0.8,
+      1.0
+    ],
+    "sample_selection": "first image of each class in shuffled test split order"
+  },
+  "latency": {
+    "definition": "prior sampling + decoder forward pass (no encoder, no FID)",
+    "batch_size": 64,
+    "warmup_runs": 20,
+    "timed_runs": 100,
+    "no_grad": true,
+    "cuda_synchronize": true
+  }
+}

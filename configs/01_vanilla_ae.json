@@ -1,0 +1,105 @@
+{
+  "model_name": "01_vanilla_ae",
+  "seed": 42,
+  "dataset": {
+    "name": "Fashion-MNIST",
+    "source": "torchvision.datasets.FashionMNIST, train=True (60,000) + train=False (10,000), pooled in that order",
+    "total_images": 70000,
+    "preprocessing": "transforms.ToTensor() only (grayscale [1, 28, 28], values in [0, 1])",
+    "split": "class-stratified 80/10/10 with np.random.default_rng(42)",
+    "split_per_class": {
+      "train": 5600,
+      "validation": 700,
+      "test": 700
+    }
+  },
+  "dataloader": {
+    "batch_size": 128,
+    "train_shuffle": true,
+    "train_generator_seed": 42,
+    "validation_shuffle": false,
+    "test_shuffle": false,
+    "num_workers": 2,
+    "pin_memory": true
+  },
+  "model": {
+    "type": "fully connected vanilla autoencoder",
+    "encoder": "Flatten(784) -> Linear(784, 256) -> ReLU -> Linear(256, 64) -> ReLU",
+    "decoder": "Linear(64, 256) -> ReLU -> Linear(256, 784) -> Sigmoid -> reshape [B, 1, 28, 28]",
+    "input_dim": 784,
+    "hidden_dim": 256,
+    "latent_dim": 64
+  },
+  "training": {
+    "loss": "nn.MSELoss(reduction=\"mean\")",
+    "optimizer": "Adam",
+    "learning_rate": 0.001,
+    "betas": [
+      0.9,
+      0.999
+    ],
+    "eps": 1e-08,
+    "weight_decay": 0.0,
+    "epochs": 30,
+    "early_stopping": false,
+    "lr_scheduler": null,
+    "gradient_clipping": null,
+    "mixed_precision": false,
+    "best_model_selection": "lowest validation MSE"
+  },
+  "evaluation": {
+    "mse": "global sum of squared pixel errors / total test pixels",
+    "psnr": "10 * log10(1.0 / MSE) in dB, computed from aggregate test MSE",
+    "ssim": "mean of per-image skimage.metrics.structural_similarity over all test images",
+    "ssim_params": {
+      "data_range": 1.0,
+      "gaussian_weights": true,
+      "sigma": 1.5,
+      "win_size": 11,
+      "use_sample_covariance": false
+    },
+    "latency": {
+      "batch_size": 64,
+      "warmup_runs": 20,
+      "timed_runs": 100,
+      "definition": "encoder + decoder forward pass"
+    },
+    "fid": "not computed (reconstruction-only experiment)"
+  },
+  "figures": {
+    "reconstruction_classes": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "interpolation_classes": [
+      0,
+      1
+    ],
+    "interpolation_alphas": [
+      0.0,
+      0.2,
+      0.4,
+      0.6,
+      0.8,
+      1.0
+    ]
+  },
+  "output_root": "/content/drive/MyDrive/generative-model-comparison/01_vanilla_ae",
+  "runtime_versions": {
+    "python": "3.13.16",
+    "torch": "2.14.1+cu130",
+    "torchvision": "0.29.1+cu130",
+    "numpy": "2.4.6",
+    "scikit_image": "0.25.2",
+    "matplotlib": "3.10.0",
+    "cuda": "13.0",
+    "cudnn": 92800,
+    "platform": "Linux-6.6.159+-x86_64-with-glibc2.39"
+  }
+}

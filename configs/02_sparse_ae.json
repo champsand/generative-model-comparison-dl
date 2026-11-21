@@ -1,0 +1,72 @@
+{
+  "model_name": "02_sparse_ae",
+  "model_class": "SparseAutoencoder",
+  "seed": 42,
+  "dataset": "Fashion-MNIST (torchvision train=True 60000 + train=False 10000, pooled in that order)",
+  "preprocessing": "transforms.ToTensor() only; [1, 28, 28]; values in [0, 1]",
+  "split": {
+    "method": "class-stratified 80/10/10, np.random.default_rng(42)",
+    "train_per_class": 5600,
+    "val_per_class": 700,
+    "test_per_class": 700,
+    "train_total": 56000,
+    "val_total": 7000,
+    "test_total": 7000
+  },
+  "architecture": {
+    "encoder": "Flatten(784) -> Linear(784,256) -> ReLU -> Linear(256,64) -> ReLU",
+    "decoder": "Linear(64,256) -> ReLU -> Linear(256,784) -> Sigmoid -> reshape [B,1,28,28]",
+    "input_dim": 784,
+    "hidden_dim": 256,
+    "latent_dim": 64,
+    "expected_trainable_params": 435536
+  },
+  "objective": {
+    "reconstruction_loss": "nn.MSELoss(reduction='mean')",
+    "raw_l1": "latent.abs().mean() over batch and all 64 latent dims",
+    "lambda_l1": 0.001,
+    "total": "reconstruction_mse + lambda_l1 * latent.abs().mean()"
+  },
+  "sparsity_threshold": 1e-08,
+  "optimizer": {
+    "name": "Adam",
+    "lr": 0.001,
+    "betas": [
+      0.9,
+      0.999
+    ],
+    "eps": 1e-08,
+    "weight_decay": 0.0
+  },
+  "epochs": 30,
+  "batch_size": 128,
+  "num_workers": 2,
+  "pin_memory": true,
+  "train_loader_generator_seed": 42,
+  "regularization_other": "none (no early stopping, scheduler, clipping, mixed precision, dropout, batchnorm)",
+  "model_selection": "lowest validation reconstruction MSE",
+  "ssim_params": {
+    "data_range": 1.0,
+    "gaussian_weights": true,
+    "sigma": 1.5,
+    "win_size": 11,
+    "use_sample_covariance": false
+  },
+  "latency": {
+    "batch_size": 64,
+    "warmup_runs": 20,
+    "timed_runs": 100,
+    "definition": "encoder + decoder forward pass"
+  },
+  "interpolation_alphas": [
+    0.0,
+    0.2,
+    0.4,
+    0.6,
+    0.8,
+    1.0
+  ],
+  "root_dir": "/content/drive/MyDrive/generative-model-comparison/02_sparse_ae",
+  "data_dir": "/content/drive/MyDrive/generative-model-comparison/02_sparse_ae/data/fashion_mnist",
+  "results_dir": "/content/drive/MyDrive/generative-model-comparison/02_sparse_ae/results"
+}
