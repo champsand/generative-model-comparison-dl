@@ -1,0 +1,268 @@
+{
+  "model_id": "03",
+  "model_name": "Vanilla GAN (fully connected)",
+  "notebook": "03_vanilla_gan_claude.ipynb",
+  "seed": 42,
+  "dataset": {
+    "name": "Fashion-MNIST",
+    "source": "torchvision.datasets.FashionMNIST train=True (60000) then train=False (10000), pooled in that order",
+    "transform": "transforms.ToTensor() only",
+    "canonical_image_shape": [
+      1,
+      28,
+      28
+    ],
+    "canonical_value_range": [
+      0.0,
+      1.0
+    ],
+    "gan_training_input_range": [
+      -1.0,
+      1.0
+    ],
+    "gan_input_conversion": "x * 2 - 1 applied to real training batches",
+    "generated_output_conversion": "(x + 1) / 2 for display and FID",
+    "augmentation": null,
+    "class_names": [
+      "T-shirt/top",
+      "Trouser",
+      "Pullover",
+      "Dress",
+      "Coat",
+      "Sandal",
+      "Shirt",
+      "Sneaker",
+      "Bag",
+      "Ankle boot"
+    ]
+  },
+  "split": {
+    "method": "class-stratified 80/10/10 with numpy default_rng(42); per class ascending: shuffle, [:5600] train, [5600:6300] validation, [6300:] test; concatenate as int64; final shuffle train, validation, test",
+    "seed": 42,
+    "per_class": {
+      "train": 5600,
+      "validation": 700,
+      "test": 700
+    },
+    "totals": {
+      "train": 56000,
+      "validation": 7000,
+      "test": 7000
+    }
+  },
+  "dataloaders": {
+    "batch_size": 128,
+    "train_shuffle": true,
+    "validation_shuffle": false,
+    "test_shuffle": false,
+    "train_shuffle_generator_seed": 42,
+    "num_workers": 2,
+    "pin_memory": true,
+    "drop_last": false
+  },
+  "architecture": {
+    "latent_dim": 100,
+    "latent_prior": "N(0, I)",
+    "generator": [
+      "Linear(100,256)",
+      "ReLU",
+      "Linear(256,512)",
+      "ReLU",
+      "Linear(512,784)",
+      "Tanh",
+      "Reshape [B,1,28,28]"
+    ],
+    "discriminator": [
+      "Flatten(784)",
+      "Linear(784,512)",
+      "LeakyReLU(0.2)",
+      "Linear(512,256)",
+      "LeakyReLU(0.2)",
+      "Linear(256,1)",
+      "Sigmoid"
+    ],
+    "weight_init": {
+      "linear_weight": "normal(mean=0, std=0.02)",
+      "linear_bias": "zeros"
+    },
+    "expected_trainable_parameters": {
+      "generator": 559632,
+      "discriminator": 533505
+    }
+  },
+  "hyperparameters": {
+    "loss": "nn.BCELoss",
+    "real_label": 1.0,
+    "fake_label": 0.0,
+    "discriminator_loss": "0.5 * (BCE(D(real), 1) + BCE(D(G(z).detach()), 0))",
+    "generator_loss": "non-saturating BCE(D(G(z)), 1)",
+    "updates_per_batch": "1 discriminator step, then 1 generator step",
+    "generator_step_noise": "the same per-batch z / G(z) used in the discriminator step of that batch",
+    "optimizer": "Adam (separate for G and D)",
+    "lr_generator": 0.0002,
+    "lr_discriminator": 0.0002,
+    "adam_betas": [
+      0.5,
+      0.999
+    ],
+    "adam_eps": 1e-08,
+    "weight_decay": 0.0,
+    "batch_size": 128,
+    "epochs": 30,
+    "train_noise_generator": "dedicated CPU torch.Generator seeded 42",
+    "discriminator_frozen_during_generator_step": true,
+    "not_used": [
+      "early stopping",
+      "LR scheduler",
+      "gradient clipping",
+      "mixed precision",
+      "one-sided label smoothing",
+      "label flipping",
+      "gradient penalty",
+      "spectral normalization",
+      "extra regularization"
+    ]
+  },
+  "monitoring": {
+    "fixed_monitor_noise_count": 64,
+    "fixed_monitor_noise_seed": 1001,
+    "diversity_indicators": {
+      "fixed_noise_pixel_std": "mean over 784 pixels of the population std (correction=0) across the 64 images, [0,1] scale",
+      "fixed_noise_mean_pairwise_l1": "mean over all 2016 image pairs of the per-pixel mean absolute difference, [0,1] scale"
+    },
+    "progression_epochs": [
+      1,
+      5,
+      10,
+      15,
+      20,
+      25,
+      30
+    ],
+    "progression_images_shown": 16,
+    "epoch_wall_time_definition": "training + fixed-noise monitoring + scheduled validation FID + best-checkpoint save; excludes the last-checkpoint write and CSV append that follow it"
+  },
+  "fid": {
+    "implementation": "pytorch-fid==0.3.0",
+    "network": "InceptionV3(use_fid_inception=True) FID weights, ImageNet-pretrained",
+    "block": "pool3",
+    "block_index": 3,
+    "feature_dim": 2048,
+    "resize_input": true,
+    "normalize_input": true,
+    "grayscale_to_rgb": "repeat single channel 3 times",
+    "input_range": [
+      0.0,
+      1.0
+    ],
+    "statistics_dtype": "float64",
+    "distance_function": "pytorch_fid.fid_score.calculate_frechet_distance",
+    "validation": {
+      "epochs": [
+        5,
+        10,
+        15,
+        20,
+        25,
+        30
+      ],
+      "num_real": 3000,
+      "num_fake": 3000,
+      "real_source": "first 3000 images of the final shuffled validation split",
+      "fake_noise_seed": 1002,
+      "purpose": "checkpoint selection only"
+    },
+    "test": {
+      "num_real": 7000,
+      "num_fake": 7000,
+      "real_source": "all 7000 held-out stratified test images",
+      "fake_noise_seed": 1003,
+      "checkpoint": "best_model.pth"
+    },
+    "inception_batch_size": 64
+  },
+  "random_samples": {
+    "count": 16,
+    "grid": [
+      4,
+      4
+    ],
+    "noise_seed": 1004
+  },
+  "latent_interpolation": {
+    "alphas": [
+      0.0,
+      0.2,
+      0.4,
+      0.6,
+      0.8,
+      1.0
+    ],
+    "class_A": 0,
+    "class_B": 1,
+    "endpoint_selection": "first position in the final test split with the given class label",
+    "endpoint_method": "latent inversion of a frozen best generator (no encoder exists)",
+    "inversion_objective": "MSE((G(z)+1)/2, target) + 1e-4 * mean(z^2)",
+    "restarts": 4,
+    "steps_per_restart": 400,
+    "optimizer": "Adam",
+    "learning_rate": 0.05,
+    "z_prior_weight": 0.0001,
+    "restart_seeds": {
+      "class_A": 1005,
+      "class_B": 1006
+    },
+    "restart_selection": "lowest final objective"
+  },
+  "latency": {
+    "definition": "Generator forward pass only",
+    "batch_size": 64,
+    "warmup_runs": 20,
+    "timed_runs": 100,
+    "noise_seed": 1007,
+    "no_grad": true,
+    "cuda_sync_each_run": true
+  },
+  "rng_seeds": {
+    "dataloader_shuffle": 42,
+    "train_noise": 42,
+    "monitor_noise": 1001,
+    "val_fid_noise": 1002,
+    "test_fid_noise": 1003,
+    "random_samples": 1004,
+    "inversion": {
+      "class_A": 1005,
+      "class_B": 1006
+    },
+    "latency_noise": 1007,
+    "sanity_checks": 1008,
+    "model_init": "torch.manual_seed(42) immediately before building G then D"
+  },
+  "paths": {
+    "project_dir": "/content/drive/MyDrive/generative-model-comparison/03_vanilla_gan",
+    "data_dir": "/content/drive/MyDrive/generative-model-comparison/03_vanilla_gan/data/fashion_mnist",
+    "results_dir": "/content/drive/MyDrive/generative-model-comparison/03_vanilla_gan/results"
+  },
+  "device": "cuda",
+  "hardware": {
+    "device_type": "cuda",
+    "cpu": "x86_64",
+    "cpu_count": 2,
+    "platform": "Linux-6.6.159+-x86_64-with-glibc2.39",
+    "gpu_name": "Tesla T4",
+    "gpu_total_memory_gb": 14.56,
+    "gpu_count": 1
+  },
+  "runtime_versions": {
+    "python": "3.13.16",
+    "torch": "2.14.1+cu130",
+    "torchvision": "0.29.1+cu130",
+    "numpy": "2.4.6",
+    "scipy": "1.16.3",
+    "matplotlib": "3.10.0",
+    "pytorch_fid": "0.3.0",
+    "tqdm": "4.67.3",
+    "cuda_runtime": "13.0",
+    "cudnn": 92800
+  }
+}

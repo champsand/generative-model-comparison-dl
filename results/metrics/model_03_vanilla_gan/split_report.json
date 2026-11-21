@@ -1,0 +1,110 @@
+{
+  "seed": 42,
+  "procedure": "class-stratified 80/10/10 with numpy default_rng(42); per class ascending: shuffle, [:5600] train, [5600:6300] validation, [6300:] test; concatenate as int64; final shuffle train, validation, test",
+  "pooled_order": "FashionMNIST(train=True) indices 0-59999, then FashionMNIST(train=False) indices 60000-69999",
+  "index_dtype": "int64 (little-endian, C-contiguous); hash = sha256(array.tobytes())",
+  "totals": {
+    "train": 56000,
+    "validation": 7000,
+    "test": 7000
+  },
+  "per_class_counts": {
+    "train": {
+      "T-shirt/top": 5600,
+      "Trouser": 5600,
+      "Pullover": 5600,
+      "Dress": 5600,
+      "Coat": 5600,
+      "Sandal": 5600,
+      "Shirt": 5600,
+      "Sneaker": 5600,
+      "Bag": 5600,
+      "Ankle boot": 5600
+    },
+    "validation": {
+      "T-shirt/top": 700,
+      "Trouser": 700,
+      "Pullover": 700,
+      "Dress": 700,
+      "Coat": 700,
+      "Sandal": 700,
+      "Shirt": 700,
+      "Sneaker": 700,
+      "Bag": 700,
+      "Ankle boot": 700
+    },
+    "test": {
+      "T-shirt/top": 700,
+      "Trouser": 700,
+      "Pullover": 700,
+      "Dress": 700,
+      "Coat": 700,
+      "Sandal": 700,
+      "Shirt": 700,
+      "Sneaker": 700,
+      "Bag": 700,
+      "Ankle boot": 700
+    }
+  },
+  "sha256": {
+    "train": "33ea53524b4322bff6a3800d5f997fb49a2c3109cc676bcec3f5bd75614d563f",
+    "validation": "ec0ca9f1abc64ba260835d8b8ade0d19c59aed038153fbab1103386380698254",
+    "test": "e10a9ab4471795dfab37b6b9a652c9a27f56343cea3a08bb82b97de2332bc3a1"
+  },
+  "first_10_indices": {
+    "train": [
+      25357,
+      32095,
+      6265,
+      15708,
+      27000,
+      29070,
+      18511,
+      56435,
+      48345,
+      66817
+    ],
+    "validation": [
+      68626,
+      60374,
+      69770,
+      57746,
+      6462,
+      8057,
+      46319,
+      18947,
+      40174,
+      35189
+    ],
+    "test": [
+      39323,
+      42925,
+      61447,
+      6906,
+      35128,
+      15479,
+      38125,
+      62313,
+      56330,
+      40588
+    ]
+  },
+  "checks": {
+    "train_dtype_int64": true,
+    "train_total": true,
+    "train_no_duplicates": true,
+    "train_per_class": true,
+    "validation_dtype_int64": true,
+    "validation_total": true,
+    "validation_no_duplicates": true,
+    "validation_per_class": true,
+    "test_dtype_int64": true,
+    "test_total": true,
+    "test_no_duplicates": true,
+    "test_per_class": true,
+    "no_overlap_train_validation": true,
+    "no_overlap_train_test": true,
+    "no_overlap_validation_test": true,
+    "full_coverage_0_69999": true
+  }
+}
