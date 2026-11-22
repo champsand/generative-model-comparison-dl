@@ -3,7 +3,6 @@
 ## Project
 
 **Project:** Comparative Study of Generative Models on Fashion-MNIST  
-**Student:** Matthew Sutiono  
 **Repository:** https://github.com/champsand/generative-model-comparison-dl
 
 ## AI tools used
