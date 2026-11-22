@@ -18,9 +18,9 @@ For the seven experiment notebooks, AI tools helped draft and discuss parts of t
 
 AI assistance was also used to organise the reusable source files under `src/`. This included model definitions, data utilities, loss functions, one-batch training helpers, evaluation functions, and supporting utilities.
 
-## Work carried out by the student
+## Work carried out by me
 
-The student was responsible for the project decisions and experiment work, including:
+I was responsible for the project decisions and experiment work, including:
 
 - Selecting the models and methods used in the comparison.
 - Deciding the experiment setup and configurations.
