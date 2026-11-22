@@ -29,7 +29,7 @@ I was responsible for the project decisions and experiment work, including:
 - Collecting and checking the metrics, training histories, and generated figures.
 - Reviewing the results and preparing the interpretation and conclusions.
 
-The training and evaluation runs reported in the repository were executed by the student in Google Colab. Claude and ChatGPT did not run the experiments or produce the saved metrics.
+The training and evaluation runs reported in the repository were executed by me in Google Colab. Claude and ChatGPT did not run the experiments or produce the saved metrics.
 
 ## Review and responsibility
 
