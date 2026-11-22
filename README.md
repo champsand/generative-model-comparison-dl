@@ -222,22 +222,6 @@ python -m tests.test_smoke
 
 This test checks model output shapes, parameter counts, split logic using synthetic balanced labels, and selected loss functions. It does not perform full training or reproduce the reported metrics.
 
-## 10. Reproducibility and saved files
-
-The repository contains:
-
-- Seven experiment notebooks and seven configuration files.
-- Per-model metrics, split reports, and training histories.
-- A full-precision master comparison CSV for the six generative models.
-- Five groups of comparative figures, with Figure 5 split into two image files.
-- Reusable PyTorch source modules and CPU smoke tests.
-
-Large checkpoints, the downloaded dataset, and large intermediate files are kept in Google Drive and are not committed to GitHub. The `.gitignore` excludes common checkpoint and dataset files.
-
-## 11. AI assistance
-
-Claude and ChatGPT were used for brainstorming and coding assistance during notebook and source development. The training runs and saved experiment results were produced by the student. More detail is provided in [AI_ASSISTANCE.md](AI_ASSISTANCE.md).
-
 ## References
 
 - Fashion-MNIST: https://github.com/zalandoresearch/fashion-mnist
@@ -245,7 +229,3 @@ Claude and ChatGPT were used for brainstorming and coding assistance during note
 - Torchvision datasets: https://pytorch.org/vision/stable/datasets.html
 - PyTorch FID: https://github.com/mseitzer/pytorch-fid
 - scikit-image SSIM: https://scikit-image.org/docs/stable/api/skimage.metrics.html#skimage.metrics.structural_similarity
-
-## License
-
-See [LICENSE](LICENSE).
