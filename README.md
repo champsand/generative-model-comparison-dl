@@ -205,12 +205,6 @@ The experiments were run in Google Colab. A GPU runtime is recommended, especial
 4. Check the installed PyTorch and torchvision versions before running.
 5. Run the cells in order and mount Google Drive when prompted.
 
-The notebooks save datasets, checkpoints, logs, and experiment outputs under:
-
-`/content/drive/MyDrive/generative-model-comparison/`
-
-The saved results in this repository are provided for inspection. Running every training cell again repeats the experiments and uses GPU time.
-
 ## 9. Using the modular source
 
 From the repository root, install the dependencies and import the source modules as needed. For example:
