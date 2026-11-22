@@ -4,7 +4,6 @@ This project compares six generative models using Fashion-MNIST. I also include 
 
 The experiments look at reconstruction quality, generated samples, latent-space behaviour, training behaviour, and inference time.
 
-**Author:** Matthew Sutiono  
 **Repository:** https://github.com/champsand/generative-model-comparison-dl  
 **Experiment environment:** Google Colab, NVIDIA Tesla T4
 
