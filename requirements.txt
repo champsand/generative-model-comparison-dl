@@ -1,0 +1,23 @@
+# Dependencies for the Fashion-MNIST generative-model experiments
+#
+# The recorded experiments were run in Google Colab with:
+# Python 3.13.16
+# PyTorch 2.14.1+cu130
+# torchvision 0.29.1+cu130
+#
+# PyTorch and torchvision are intentionally not pinned here. Colab provides
+# builds that must match the selected CUDA runtime. Check the installed versions
+# before installing anything, and do not blindly upgrade them in a GPU runtime.
+#
+# For a local environment, install a compatible PyTorch/torchvision pair first:
+# https://pytorch.org/get-started/locally/
+#
+# The versions below are taken from the recorded experiment runtime.
+
+numpy==2.4.6
+scipy==1.16.3
+matplotlib==3.10.0
+scikit-image==0.25.2
+pandas==2.2.3
+pytorch-fid==0.3.0
+tqdm==4.67.3
