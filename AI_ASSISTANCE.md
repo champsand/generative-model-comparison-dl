@@ -33,6 +33,4 @@ The training and evaluation runs reported in the repository were executed by me 
 
 ## Review and responsibility
 
-AI-generated or AI-suggested code was treated as a draft and reviewed before execution. The student is responsible for understanding the submitted code, methods, results, and explanations, and for checking that the final report matches the saved experiment evidence.
-
-This file describes the assistance used during the project. It does not replace the course's academic-integrity rules. The scope of AI coding assistance should be checked against the lecturer's instructions before submission.
+AI-generated or AI-suggested code was treated as a draft and reviewed before execution. I am responsible for understanding the submitted code, methods, results, and explanations, and for checking that the final report matches the saved experiment evidence.
